@@ -1,0 +1,11 @@
+# Cloudflare Pages configuration.
+# The site builds to a static `dist/` directory (Astro `output: 'static'`).
+# Connect the `site/` directory as the Pages project root, or build locally
+# and deploy `dist/`.
+
+name = "digitali"
+compatibility_date = "2026-10-01"
+
+[build]
+command = "npm run build"
+cwd = "site"

@@ -1,0 +1,62 @@
+DIGITALI — ULTIMATE OFFLINE LIFE PLANNER
+SINGLE-USER DIGITAL LICENSE
+Version 1.0 — October 2026
+
+This is a draft license. [MERCHANT CONFIG: legal business/individual name]
+("Digitali", "we") grants you ("you", the purchaser) the following rights
+in the Ultimate Offline Life Planner software ("the Software").
+
+1. GRANT OF LICENSE
+   You may install and use the Software on any devices you personally own
+   or control, for your own personal, non-commercial use.
+
+2. BACKUP COPIES
+   You may make backup copies of the Software and of your exported data
+   files for archival purposes.
+
+3. RESTRICTIONS
+   You may not:
+   (a) redistribute, resell, sublicense, rent, or share the Software or
+       your download link with any other person;
+   (b) publish the Software or substantial parts of it on any website,
+       marketplace, or file-sharing service;
+   (c) remove or alter copyright or attribution notices;
+   (d) use the Software to provide a paid planning service to third parties
+       without our prior written permission.
+
+4. OWNERSHIP
+   The Software is licensed, not sold. Digitali retains all ownership and
+   intellectual property rights.
+
+5. YOUR DATA
+   All planning data you create is stored locally on your device by your
+   browser. We do not receive, store, or have access to your data.
+
+6. BUDGET TOOL — INFORMATIONAL ONLY
+   The budget tracker is a personal record-keeping aid. It is not financial,
+   investment, tax, or legal advice. Consult a qualified professional for
+   decisions about your finances.
+
+7. NO WARRANTY
+   The Software is provided "as is", without warranty of any kind, express
+   or implied, including but not limited to fitness for a particular purpose.
+   Browser storage can be cleared by the browser, the operating system, or
+   the user; you are responsible for keeping backups of your data.
+
+8. LIMITATION OF LIABILITY
+   To the maximum extent permitted by law, Digitali shall not be liable for
+   any indirect, incidental, or consequential damages, including loss of data,
+   arising from use of the Software. Our total liability shall not exceed the
+   amount you paid for the Software.
+
+9. TERMINATION
+   This license terminates automatically if you breach its terms, at which
+   point you must delete all copies of the Software.
+
+10. GOVERNING LAW
+    [MERCHANT CONFIG: jurisdiction / governing law]
+
+11. CONTACT
+    [MERCHANT CONFIG: contact email]
+
+By downloading or using the Software you agree to these terms.

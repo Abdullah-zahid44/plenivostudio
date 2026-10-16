@@ -1,0 +1,173 @@
+---
+import Base from '../../layouts/Base.astro';
+import CheckoutButton from '../../components/CheckoutButton.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScreenshotFigure from '../../components/ScreenshotFigure.astro';
+import CompatibilityNote from '../../components/CompatibilityNote.astro';
+import { getProduct, formatPrice } from '../../config/products';
+
+const product = getProduct('ultimate-life-planner');
+if (!product) throw new Error('Product not found in catalog');
+
+const faqs = [
+  {
+    q: 'Do I need the internet to use it after purchase?',
+    a: 'No. The planner is a single self-contained HTML file. Once downloaded, it runs entirely offline in your browser.',
+  },
+  {
+    q: 'Which devices and browsers are supported?',
+    a: 'Recent versions of Chrome, Edge, Firefox and Safari on desktop are supported. Mobile browsers work for everyday use. The ZIP includes a BROWSER-SUPPORT.md file with the full tested matrix — we state what is tested rather than claiming universal support.',
+  },
+  {
+    q: 'Where is my data stored?',
+    a: 'Locally in your browser (IndexedDB with a localStorage fallback). Nothing is uploaded anywhere. Keep regular backups with the built-in JSON export, because clearing browser data will remove unsaved changes.',
+  },
+  {
+    q: 'What exactly do I receive?',
+    a: 'A ZIP archive with the planner HTML file, README, quick-start guide, license, changelog, browser-support matrix and backup instructions.',
+  },
+  {
+    q: 'Can I use it on multiple devices?',
+    a: 'Your license covers you as one user on your own devices. Each copy keeps its own local data — there is no sync. Use export/import to move data between devices.',
+  },
+  {
+    q: 'What is the refund policy?',
+    a: 'Please read the Refund Policy page before purchasing. Because this is a downloadable digital product, refunds are limited once the file has been downloaded, with exceptions as described there and as required by applicable law.',
+  },
+];
+
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  description: product.tagline,
+  brand: { '@type': 'Brand', name: 'Digitali' },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: product.currency,
+    price: product.priceUSD.toFixed(2),
+    availability: 'https://schema.org/InStock',
+  },
+};
+---
+
+<Base
+  title={product.name}
+  description={`${product.tagline} One-time purchase of ${formatPrice(product.priceUSD)}. Works offline — your data stays on your device.`}
+  path={`/products/${product.slug}`}
+  productJsonLd={productJsonLd}
+>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="eyebrow">Digital planner</p>
+      <h1>{product.name}</h1>
+      <p class="lead">{product.tagline}</p>
+      <p>
+        <span class="price">{formatPrice(product.priceUSD)}</span>
+        <span class="price-note"> one-time purchase · version {product.version}</span>
+      </p>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0 2.5rem;">
+        <CheckoutButton product={product} />
+        <a class="btn btn-secondary" href={product.demoPath}>Try the free demo</a>
+      </div>
+
+      <div class="grid-12">
+        <div class="col-6">
+          <ScreenshotFigure
+            src="/screenshots/planner-dashboard.png"
+            alt="Ultimate Offline Life Planner dashboard: today's date, daily summary, priorities, upcoming tasks and habit progress"
+            caption="Dashboard — your day at a glance"
+            eager
+          />
+        </div>
+        <div class="col-6">
+          <ScreenshotFigure
+            src="/screenshots/planner-tasks.png"
+            alt="Tasks view: task list with priorities, categories, due dates and filters"
+            caption="Tasks — priorities, categories, due dates"
+          />
+        </div>
+        <div class="col-6">
+          <ScreenshotFigure
+            src="/screenshots/planner-habits.png"
+            alt="Habit tracker: daily check-offs, streak counters and weekly statistics"
+            caption="Habits — streaks and statistics"
+          />
+        </div>
+        <div class="col-6">
+          <ScreenshotFigure
+            src="/screenshots/planner-calendar.png"
+            alt="Monthly calendar with navigation, date selection and events"
+            caption="Monthly calendar"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="features-heading">
+    <div class="wrap">
+      <h2 id="features-heading">Everything included</h2>
+      <div class="feature-grid">
+        {
+          product.detailedFeatures.map((f) => (
+            <div class="feature-card">
+              <h3>{f.title}</h3>
+              <p class="muted" style="margin: 0;">
+                {f.description}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="included-heading">
+    <div class="wrap">
+      <h2 id="included-heading">What's in the ZIP</h2>
+      <ul>
+        {product.whatsIncluded.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="req-heading">
+    <div class="wrap">
+      <h2 id="req-heading">Requirements &amp; limitations</h2>
+      <h3>Requirements</h3>
+      <ul>
+        {product.requirements.map((r) => <li>{r}</li>)}
+      </ul>
+      <h3>Limitations — please read before buying</h3>
+      <ul>
+        {product.limitations.map((l) => <li>{l}</li>)}
+      </ul>
+      <CompatibilityNote />
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="license-heading">
+    <div class="wrap">
+      <h2 id="license-heading">License</h2>
+      <p>
+        Single-user digital license: you may use the planner on your own devices and
+        keep backups for personal use. Redistribution, resale or sharing the file is
+        not permitted. <a href="/license">Read the full license</a>.
+      </p>
+      <h2 id="buy-heading" style="margin-top: 2.5rem;">Get the planner</h2>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+        <CheckoutButton product={product} />
+        <a class="btn btn-secondary" href="/refund-policy">Refund policy</a>
+        <a class="btn btn-secondary" href="/faq">Questions? Read the FAQ</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="pfaq-heading">
+    <div class="wrap" style="max-width: 800px;">
+      <h2 id="pfaq-heading">Product questions</h2>
+      <FaqAccordion items={faqs} headingLevel="h3" />
+    </div>
+  </section>
+</Base>

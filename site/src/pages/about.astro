@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+---
+
+<Base
+  title="About"
+  description="Digitali is an independent maker of offline digital planning tools — one-time purchase software that keeps your data on your device."
+  path="/about"
+>
+  <section class="section-tight">
+    <div class="wrap" style="max-width: 760px;">
+      <p class="eyebrow">About</p>
+      <h1>Software made to be owned, not rented</h1>
+      <p>
+        {site.brandName} is a small, independent software maker. We build digital
+        planning tools as files you buy once and keep — no subscriptions, no
+        accounts, no cloud services standing between you and your plans.
+      </p>
+      <p>
+        Our first product, the Ultimate Offline Life Planner, is a single
+        self-contained HTML file. It runs in your browser, works without an
+        internet connection, and stores your data locally on your own device.
+        When you are done planning, you can export everything to a file you
+        control.
+      </p>
+      <h2>What we believe</h2>
+      <ul>
+        <li>
+          <strong>Ownership over access.</strong> When you pay for software, you
+          should own a copy of it — not rent permission to use it.
+        </li>
+        <li>
+          <strong>Privacy by architecture.</strong> The simplest way to protect
+          your data is to never collect it. Our planner has no analytics, no
+          tracking and no network calls.
+        </li>
+        <li>
+          <strong>Honesty over marketing.</strong> We state what our software does,
+          what it requires, and where its limits are — on this site and in the
+          documentation included with every product.
+        </li>
+      </ul>
+      <h2>Company details</h2>
+      <div class="notice warn" role="note">
+        <p style="margin: 0;">
+          <strong>Configuration pending.</strong> Legal company details are being
+          finalized and will be published here before launch: {
+            site.merchant.companyName
+          }, {site.merchant.address}, {site.merchant.jurisdiction}. We do not
+          invent or imply company registration, addresses or tax identifiers.
+        </p>
+      </div>
+      <p>
+        Questions? <a href="/contact">Contact us</a> — we read every message.
+      </p>
+    </div>
+  </section>
+</Base>

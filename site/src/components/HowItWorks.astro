@@ -1,0 +1,20 @@
+---
+/** Numbered "How it works" steps. */
+interface Props {
+  steps: { title: string; text: string }[];
+}
+const { steps } = Astro.props;
+---
+
+<ol class="steps">
+  {
+    steps.map((s) => (
+      <li>
+        <h3>{s.title}</h3>
+        <p class="muted" style="margin: 0;">
+          {s.text}
+        </p>
+      </li>
+    ))
+  }
+</ol>

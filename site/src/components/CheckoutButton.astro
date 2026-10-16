@@ -1,0 +1,43 @@
+---
+import { checkout } from '../config/checkout';
+import type { Product } from '../config/products';
+
+/**
+ * Purchase button with honest states.
+ * - When checkout is disabled: a disabled button explaining that purchasing
+ *   opens after store activation. It never pretends to complete a purchase.
+ * - When enabled: a real link to the hosted Lemon Squeezy checkout URL.
+ */
+interface Props {
+  product: Product;
+}
+const { product } = Astro.props;
+
+const variantUrl = checkout.variants[product.checkoutVariantKey];
+const ready = checkout.enabled && variantUrl !== '';
+---
+
+{
+  ready ? (
+    <div>
+      <a class="btn btn-primary" href={variantUrl}>
+        Buy now — one-time purchase
+      </a>
+      <p class="small muted" style="margin-top: 0.75rem;">
+        Secure checkout provided by Lemon Squeezy. You will be redirected to complete
+        your purchase.
+      </p>
+    </div>
+  ) : (
+    <div>
+      <button class="btn btn-disabled" type="button" disabled aria-describedby="checkout-note">
+        Purchasing opens after store activation
+      </button>
+      <p class="small muted" id="checkout-note" style="margin-top: 0.75rem;">
+        Checkout is not active yet — our payment provider setup is still in progress.
+        This button will become a working purchase link once the store is activated.
+        No payment can be taken in this state.
+      </p>
+    </div>
+  )
+}

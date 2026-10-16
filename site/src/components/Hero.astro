@@ -1,0 +1,31 @@
+---
+/** Hero section with headline, subheading, CTAs and a real product screenshot. */
+interface Props {
+  title: string;
+  subheading: string;
+  primaryCta: { href: string; label: string };
+  secondaryCta: { href: string; label: string };
+  imageSrc: string;
+  imageAlt: string;
+  imageCaption?: string;
+}
+const { title, subheading, primaryCta, secondaryCta, imageSrc, imageAlt, imageCaption } =
+  Astro.props;
+---
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>{title}</h1>
+      <p class="lead">{subheading}</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href={primaryCta.href}>{primaryCta.label}</a>
+        <a class="btn btn-secondary" href={secondaryCta.href}>{secondaryCta.label}</a>
+      </div>
+    </div>
+    <figure class="hero-figure">
+      <img src={imageSrc} alt={imageAlt} width="1200" height="800" fetchpriority="high" />
+      {imageCaption && <figcaption>{imageCaption}</figcaption>}
+    </figure>
+  </div>
+</section>

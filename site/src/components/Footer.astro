@@ -1,0 +1,84 @@
+---
+import { site } from '../config/site';
+
+const year = new Date().getFullYear();
+
+const shopLinks = [
+  { href: '/products', label: 'All products' },
+  { href: '/products/ultimate-life-planner', label: 'Ultimate Offline Life Planner' },
+  { href: '/demo', label: 'Live demo' },
+];
+
+const companyLinks = [
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/faq', label: 'FAQ' },
+];
+
+const legalLinks = [
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/terms', label: 'Terms of Service' },
+  { href: '/refund-policy', label: 'Refund Policy' },
+  { href: '/license', label: 'License' },
+];
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h2>{site.brandName}</h2>
+        <p class="small muted">{site.tagline}</p>
+        <p class="small muted">
+          {
+            site.contactEmail ? (
+              <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
+            ) : (
+              'Contact email: not yet configured.'
+            )
+          }
+        </p>
+      </div>
+      <nav aria-label="Shop">
+        <h2>Shop</h2>
+        <ul>
+          {
+            shopLinks.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <nav aria-label="Company">
+        <h2>Company</h2>
+        <ul>
+          {
+            companyLinks.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <nav aria-label="Legal">
+        <h2>Legal</h2>
+        <ul>
+          {
+            legalLinks.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {site.brandName}. All rights reserved.</span>
+      <span>Offline-first digital planning tools.</span>
+    </div>
+  </div>
+</footer>

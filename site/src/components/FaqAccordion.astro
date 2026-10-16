@@ -1,0 +1,50 @@
+---
+/** Accessible FAQ accordion: real buttons with aria-expanded. */
+interface Faq {
+  q: string;
+  a: string;
+}
+interface Props {
+  items: Faq[];
+  headingLevel?: 'h2' | 'h3';
+}
+const { items, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<div class="faq-list">
+  {
+    items.map((item, i) => (
+      <div class="faq-item">
+        <Heading style="margin:0">
+          <button
+            class="faq-question"
+            type="button"
+            aria-expanded="false"
+            aria-controls={`faq-a-${i}`}
+            id={`faq-q-${i}`}
+          >
+            <span>{item.q}</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+        </Heading>
+        <div class="faq-answer" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} hidden>
+          <p style="margin:0">{item.a}</p>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  document.querySelectorAll('.faq-question').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const answer = document.getElementById(btn.getAttribute('aria-controls') || '');
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (answer) answer.hidden = expanded;
+      const icon = btn.querySelector('.faq-icon');
+      if (icon) icon.textContent = expanded ? '+' : '–';
+    });
+  });
+</script>

@@ -1,0 +1,1 @@
+{"compilerOptions":{"jsx":"react-jsx","module":"ESNext","moduleResolution":"Bundler","strict":true,"target":"ES2022"},"extends":"astro/tsconfigs/strict","include":["src"]}

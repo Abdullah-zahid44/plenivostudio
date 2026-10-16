@@ -1,0 +1,11 @@
+---
+/** Truthful announcement strip — no fake offers, no countdowns. */
+interface Props {
+  text?: string;
+}
+const { text = 'One-time purchase. No subscriptions. Works offline.' } = Astro.props;
+---
+
+<div class="announcement" role="note">
+  <p><strong>Digitali:</strong> {text}</p>
+</div>

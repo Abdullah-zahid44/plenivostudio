@@ -1,0 +1,43 @@
+---
+import { formatPrice, type Product } from '../config/products';
+import CheckoutButton from './CheckoutButton.astro';
+
+/** Featured product card: price always from config, honest caveats included. */
+interface Props {
+  product: Product;
+}
+const { product } = Astro.props;
+---
+
+<article class="product-card" aria-labelledby={`product-${product.id}`}>
+  <div>
+    <img
+      src="/screenshots/planner-dashboard.png"
+      alt={`${product.name} — dashboard view showing today's date, priorities, tasks and habit progress`}
+      width="1200"
+      height="800"
+      loading="lazy"
+      style="border-radius: 14px; border: 1px solid var(--line);"
+    />
+  </div>
+  <div>
+    <p class="eyebrow">Featured product</p>
+    <h3 id={`product-${product.id}`} style="font-size: 1.75rem;">{product.name}</h3>
+    <p class="muted">{product.tagline}</p>
+    <p>
+      <span class="price">{formatPrice(product.priceUSD)}</span>
+      <span class="price-note"> one-time purchase</span>
+    </p>
+    <ul>
+      {product.features.slice(0, 5).map((f) => <li>{f}</li>)}
+    </ul>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.25rem;">
+      <CheckoutButton product={product} />
+      <a class="btn btn-secondary" href={`/products/${product.slug}`}>View details</a>
+      <a class="btn btn-secondary" href={product.demoPath}>Try free demo</a>
+    </div>
+    <p class="small muted" style="margin-top: 1rem;">
+      Works offline in a modern browser. Your data stays on your device.
+    </p>
+  </div>
+</article>

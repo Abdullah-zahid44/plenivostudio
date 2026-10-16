@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Live demo — try the planner free"
+  description="Try the Ultimate Offline Life Planner free in your browser. The demo is the real planner running with isolated sample data."
+  path="/demo"
+>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="eyebrow">Free demo</p>
+      <h1>Try the real planner, right now</h1>
+      <div class="notice" role="note">
+        <p style="margin: 0;">
+          <strong>This is a demo.</strong> It is the actual planner running with
+          isolated sample data. Anything you change here stays in this demo only —
+          it never touches a purchased copy, and nothing leaves your device. Your
+          demo data can be cleared at any time from Settings.
+        </p>
+      </div>
+      <p>
+        <a href="/downloads/demo.html" target="_blank" rel="noopener">
+          Open the demo full-screen
+        </a>
+      </p>
+      <iframe
+        class="demo-frame"
+        src="/downloads/demo.html"
+        title="Live demo of the Ultimate Offline Life Planner"
+        loading="lazy"
+      ></iframe>
+      <p class="small muted" style="margin-top: 1rem;">
+        If the embedded demo does not load in your browser, use the full-screen link
+        above. Like the purchased product, the demo works offline once loaded and
+        stores its sample data locally on your device.
+      </p>
+      <div style="margin-top: 2rem;">
+        <a class="btn btn-primary" href="/products/ultimate-life-planner">See the full product</a>
+      </div>
+    </div>
+  </section>
+</Base>

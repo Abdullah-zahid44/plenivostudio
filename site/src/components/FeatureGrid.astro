@@ -1,0 +1,28 @@
+---
+/** Grid of benefit cards. Icons are inline SVG (no emoji, no stock art). */
+interface Benefit {
+  title: string;
+  text: string;
+  icon: string;
+}
+interface Props {
+  items: Benefit[];
+}
+const { items } = Astro.props;
+---
+
+<div class="feature-grid">
+  {
+    items.map((b) => (
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">
+          <Fragment set:html={b.icon} />
+        </div>
+        <h3>{b.title}</h3>
+        <p class="muted" style="margin: 0;">
+          {b.text}
+        </p>
+      </div>
+    ))
+  }
+</div>

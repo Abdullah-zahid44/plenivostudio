@@ -1,0 +1,197 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import FeatureGrid from '../components/FeatureGrid.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import ProductCard from '../components/ProductCard.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import CompatibilityNote from '../components/CompatibilityNote.astro';
+import { products } from '../config/products';
+
+const product = products[0];
+
+const icon = (path: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+
+const benefits = [
+  {
+    title: 'Works offline',
+    text: 'The planner is a single HTML file. After download, it runs entirely in your browser — no internet connection needed, ever.',
+    icon: icon(
+      '<line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 5-2.91"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/>'
+    ),
+  },
+  {
+    title: 'One-time purchase',
+    text: 'Pay once, own it. No subscriptions, no renewals, no feature paywalls added later.',
+    icon: icon(
+      '<path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1"/>'
+    ),
+  },
+  {
+    title: 'Your data stays yours',
+    text: 'Everything is stored locally in your own browser. No account, no cloud sync, no tracking inside the planner.',
+    icon: icon(
+      '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'
+    ),
+  },
+  {
+    title: 'Backup & restore',
+    text: 'Export your data to a JSON file any time, with validation and corruption checks. Import it back whenever you need.',
+    icon: icon(
+      '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>'
+    ),
+  },
+  {
+    title: 'No account required',
+    text: 'Nothing to sign up for, nothing to log in to. Download the file and start planning immediately.',
+    icon: icon(
+      '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="22" y2="13"/><line x1="22" y1="8" x2="17" y2="13"/>'
+    ),
+  },
+  {
+    title: 'Instant digital download',
+    text: 'After purchase, download the ZIP immediately. Extract it and open the planner in your browser — done in minutes.',
+    icon: icon(
+      '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>'
+    ),
+  },
+];
+
+const steps = [
+  {
+    title: 'Choose your product',
+    text: 'Browse the shop and pick the planner that fits how you work.',
+  },
+  {
+    title: 'Purchase securely',
+    text: 'Check out through our payment provider. You pay once — there is no subscription.',
+  },
+  {
+    title: 'Download the ZIP',
+    text: 'Your download is available immediately after purchase.',
+  },
+  {
+    title: 'Extract the files',
+    text: 'Unzip the archive on your computer, tablet or phone.',
+  },
+  {
+    title: 'Open the planner',
+    text: 'Open the HTML file in a modern browser. No installation, no account.',
+  },
+  {
+    title: 'Save and back up',
+    text: 'Your data is stored locally. Use the built-in export regularly to keep your own backups.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Do I need the internet to use the planner?',
+    a: 'No. After you download the ZIP, the planner runs entirely offline in your browser. An internet connection is only needed for the initial purchase and download.',
+  },
+  {
+    q: 'Is this a subscription?',
+    a: 'No. Every Digitali product is a one-time purchase. You pay once and the file is yours to keep and use.',
+  },
+  {
+    q: 'Where is my data stored?',
+    a: 'In your own browser, on your own device — using IndexedDB with a localStorage fallback. Nothing is sent to us or to any cloud service. Because browser storage can be cleared, the planner includes a manual JSON export so you can keep your own backups.',
+  },
+  {
+    q: 'Can I try it before buying?',
+    a: 'Yes. The free demo is the real planner with isolated sample data. Explore every section, then decide.',
+  },
+  {
+    q: 'What do I get when I buy?',
+    a: 'A ZIP archive containing the planner as a single self-contained HTML file, plus a README, quick-start guide, license, changelog and browser-support documentation.',
+  },
+  {
+    q: 'Can I get a refund?',
+    a: 'Please read our Refund Policy before purchasing. Digital products that have been downloaded are generally not refundable, with exceptions described in the policy and as required by applicable law.',
+  },
+];
+
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  description: product.tagline,
+  brand: { '@type': 'Brand', name: 'Digitali' },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: product.currency,
+    price: product.priceUSD.toFixed(2),
+    availability: 'https://schema.org/InStock',
+  },
+};
+---
+
+<Base
+  title="Offline digital planners — one-time purchase, no subscription"
+  description="Digitali makes beautifully designed offline digital planning tools. Buy once, use forever. Your planning data stays on your device — no cloud, no subscription."
+  path="/"
+  productJsonLd={productJsonLd}
+>
+  <Hero
+    title="Plan Better. Work Offline. Own Your Data."
+    subheading="Beautifully designed digital planning tools you can purchase once and use without subscriptions. Your planning data stays on your device."
+    primaryCta={{ href: '/products', label: 'Explore Planners' }}
+    secondaryCta={{ href: '/demo', label: 'Try Free Demo' }}
+    imageSrc="/screenshots/planner-dashboard.png"
+    imageAlt="Ultimate Offline Life Planner dashboard showing today's date, daily priorities, upcoming tasks and habit progress"
+    imageCaption="Actual screenshot of the Ultimate Offline Life Planner"
+  />
+
+  <section class="section-tight" aria-labelledby="benefits-heading">
+    <div class="wrap">
+      <p class="eyebrow">Why Digitali</p>
+      <h2 id="benefits-heading">Planning software that respects you</h2>
+      <FeatureGrid items={benefits} />
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="how-heading">
+    <div class="wrap">
+      <p class="eyebrow">How it works</p>
+      <h2 id="how-heading">From purchase to planning in minutes</h2>
+      <HowItWorks steps={steps} />
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="featured-heading">
+    <div class="wrap">
+      <h2 id="featured-heading" class="muted small" style="font-family: var(--font-ui);">
+        Featured product
+      </h2>
+      <ProductCard product={product} />
+      <div style="margin-top: 1.5rem;">
+        <CompatibilityNote compact />
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="preview-heading">
+    <div class="wrap">
+      <div class="card" style="text-align: center;">
+        <p class="eyebrow">Interactive preview</p>
+        <h2 id="preview-heading">Try the real thing, free</h2>
+        <p class="muted" style="max-width: 40rem; margin: 0 auto 1.5rem;">
+          The demo is the actual planner running with sample data. Click around, add a
+          task, check off a habit — nothing you do affects any purchased copy.
+        </p>
+        <a class="btn btn-primary" href="/demo">Open the live demo</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" aria-labelledby="faq-heading">
+    <div class="wrap" style="max-width: 800px;">
+      <h2 id="faq-heading">Frequently asked questions</h2>
+      <FaqAccordion items={faqs} />
+      <p style="margin-top: 1.5rem;">
+        <a href="/faq">See all questions</a>
+      </p>
+    </div>
+  </section>
+</Base>

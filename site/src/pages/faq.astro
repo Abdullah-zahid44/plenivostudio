@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+
+const faqs = [
+  {
+    q: 'What does "offline" actually mean for your products?',
+    a: 'Each planner is a single self-contained HTML file. After you download it, everything — the interface, your data, backups — runs in your browser with no internet connection. There are no servers to reach, no accounts to sign in to, and no features that stop working offline.',
+  },
+  {
+    q: 'Is this a subscription?',
+    a: 'No. All Digitali products are sold as one-time purchases. You pay once and keep the file. We will never convert a purchased product into a subscription.',
+  },
+  {
+    q: 'Where is my planning data stored?',
+    a: 'In your own browser on your own device, using IndexedDB with a localStorage fallback. Nothing is transmitted to us or to any third party. If your browser cannot persist data (for example in some private modes or file:// contexts), the planner tells you honestly and offers manual export instead of silently losing your work.',
+  },
+  {
+    q: 'What happens if I clear my browser data?',
+    a: 'Clearing browser/site data will remove the planner\u2019s stored data. This is why the planner includes a one-click JSON export: keep regular backups in a place you control, and you can restore them any time.',
+  },
+  {
+    q: 'Can I use the planner on multiple devices?',
+    a: 'Your single-user license covers you on your own devices. There is no cloud sync, so each copy keeps its own local data. To move data between devices, export a JSON backup on one device and import it on the other.',
+  },
+  {
+    q: 'Which browsers and devices are supported?',
+    a: 'Recent Chrome, Edge, Firefox and Safari on desktop are supported, and mobile browsers work for everyday use. Every product ships with a BROWSER-SUPPORT.md file listing exactly what was tested. We do not claim universal support.',
+  },
+  {
+    q: 'What do I receive when I buy?',
+    a: 'A ZIP archive containing the planner as a single HTML file plus documentation: README, quick-start guide, license, changelog, browser-support matrix and backup instructions.',
+  },
+  {
+    q: 'How do I receive my download after paying?',
+    a: 'Through our payment provider\u2019s approved digital delivery. Once checkout is activated, you will get a download link immediately after purchase. Until then, purchasing is disabled and this site clearly says so.',
+  },
+  {
+    q: 'What is your refund policy?',
+    a: 'Please read the Refund Policy page in full before buying. In short: because these are downloadable digital products, refunds are limited once the file has been downloaded — with the exceptions described in the policy and as required by applicable consumer law.',
+  },
+  {
+    q: 'Is the budget tracker financial advice?',
+    a: 'No. The budget tracker is a simple informational tool for recording income and expenses. It is not financial advice, and we are not financial advisors.',
+  },
+  {
+    q: 'Can I share the file with family or friends?',
+    a: 'The license is for a single user. Please do not redistribute or share the file. If someone else wants it, point them to this site so they can get their own licensed copy.',
+  },
+  {
+    q: 'How do I contact support?',
+    a: 'Use the Contact page. Until our contact email is configured, the page will say so plainly rather than pretending to send your message.',
+  },
+];
+---
+
+<Base
+  title="Frequently asked questions"
+  description="Answers about Digitali's offline planners: how offline works, where data is stored, licensing, refunds and support."
+  path="/faq"
+>
+  <section class="section-tight">
+    <div class="wrap" style="max-width: 800px;">
+      <p class="eyebrow">FAQ</p>
+      <h1>Frequently asked questions</h1>
+      <FaqAccordion items={faqs} />
+    </div>
+  </section>
+</Base>
