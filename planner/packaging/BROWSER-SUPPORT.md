@@ -20,8 +20,10 @@ so we can update this document.
 ## Opening from disk (file://)
 
 Double-clicking `ultimate-life-planner.html` opens it directly from your disk.
-This works in current Firefox and Chromium-based browsers, including
-localStorage persistence.
+This works in current Firefox and Chromium-based browsers. Data is stored in
+IndexedDB when the browser allows it for `file://` pages, otherwise the
+planner automatically falls back to localStorage (and warns you on-screen if
+only temporary memory storage is available).
 
 Known caveats:
 

@@ -1874,15 +1874,28 @@ async function boot() {
         <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
           <div>
             <div style="font-weight: 600; font-size: 14px; margin-bottom: 2px;">${h.name}</div>
-            <div style="font-size: 11px; color: var(--text-muted);">🔥 Streak: ${h.streak} days</div>
+            <div style="font-size: 11px; color: var(--text-muted);">🔥 Streak: ${h.streak} days · This week: ${h.days.filter(Boolean).length}/7</div>
           </div>
           <div style="display: flex; gap: 5px;">
-            ${h.days.map(d => `<div style="width: 20px; height: 20px; border-radius: 50%; background: ${d ? 'var(--accent)' : 'var(--border)'};"></div>`).join('')}
+            ${h.days.map((d, di) => `<div onclick="toggleHabitDay(${h.id}, ${di})" title="Toggle ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][di]}" style="width: 20px; height: 20px; border-radius: 50%; cursor: pointer; background: ${d ? 'var(--accent)' : 'var(--border)'};"></div>`).join('')}
           </div>
         </div>
       `).join('');
     }
 
+    function calcStreak(days) {
+        let n = 0;
+        for (let i = days.length - 1; i >= 0; i--) { if (days[i]) n++; else break; }
+        return n;
+      }
+      function toggleHabitDay(habitId, dayIndex) {
+        const h = state.habits.find(x => x.id === habitId);
+        if (!h || !Array.isArray(h.days) || dayIndex < 0 || dayIndex >= h.days.length) return;
+        h.days[dayIndex] = !h.days[dayIndex];
+        h.streak = calcStreak(h.days);
+        saveState(); renderHabits(); renderToday(); renderProgress();
+        showToast(h.days[dayIndex] ? 'Habit logged for the day' : 'Habit unmarked');
+      }
     function openAddHabitModal() {
       openModal("Add New Habit", `
         <div style="display: flex; flex-direction: column; gap: 12px;">

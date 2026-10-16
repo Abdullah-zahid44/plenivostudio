@@ -81,15 +81,16 @@ external network requests.
    devices.** Expected to work (standard web APIs only) but unverified; the
    smoke test covers Firefox and Chromium on desktop. See
    `planner/packaging/BROWSER-SUPPORT.md`.
-4. **The planner requests Google Fonts (Inter) via CDN on load.** Offline it
-   falls back to system fonts and works fully, but this is one external
-   request — flagged by `tests/planner-smoke.mjs` ("offline" check). Removing
-   it is a planned fix before launch.
-5. **Habit day-toggle has no UI control in v1.0.0.** Adding a habit works;
-   the 7-day dots are display-only — flagged by the smoke test. Planned fix.
-6. **Storage is localStorage-based** in the shipped file (no IndexedDB layer
-   yet). Data persists per browser profile; regular JSON backups are
-   recommended (Settings → Export). `file://` caveats are documented in
+4. **The planner makes zero external requests.** Google Fonts CDN links were
+   removed during QA; the planner uses system font stacks (Georgia / system
+   sans) so it works fully offline. Verified by `tests/planner-smoke.mjs`.
+5. **Habit day-toggle works.** Each of the 7 day-dots is clickable and the
+   streak recalculates from consecutive completions; weekly count (x/7) shown.
+6. **Storage is IndexedDB-first** (database `digitali-ulp`, object store `kv`),
+   with automatic fallback to localStorage and then in-memory storage (with an
+   on-screen warning to export a backup if only memory is available). Data
+   persists per browser profile; regular JSON backups are recommended
+   (Backup / Restore → Export). `file://` caveats are documented in
    `planner/packaging/BROWSER-SUPPORT.md`.
 7. **Single product.** The catalog contains one product: Ultimate Offline
    Life Planner, $29 one-time (from `site/src/config/products.ts`).
