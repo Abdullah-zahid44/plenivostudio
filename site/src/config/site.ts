@@ -26,7 +26,7 @@ export const site = {
    * CONFIG ITEM — owner must supply a verified contact email before launch.
    * Until set, the contact page shows a "not configured" notice.
    */
-  contactEmail: '',
+  contactEmail: 'info.cosmicragsltd@gmail.com',
   /** No social accounts exist yet — owner may add verified URLs here. */
   socials: [] as { label: string; href: string }[],
   locale: 'en-US',
