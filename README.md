@@ -1,16 +1,16 @@
-# Digitali
+# Plenivostudio
 
-Digitali is a one-person digital products business selling a one-time-purchase,
+Plenivostudio is a one-person digital products business selling a one-time-purchase,
 offline HTML life planner. This monorepo contains the marketing site, the
 planner product, packaging, docs, and tests.
 
-**Brand note:** "Digitali" is a temporary, editable brand name until confirmed
+**Brand note:** "Plenivostudio" is a temporary, editable brand name until confirmed
 by the owner.
 
 ## Repository map
 
 ```
-digitali/
+plenivostudio/
 ├── README.md                  # this file
 ├── ARCHITECTURE.md            # architecture, design tokens, honesty rules
 ├── site/                      # Astro 4+ marketing site → Cloudflare Pages
@@ -86,7 +86,7 @@ external network requests.
    sans) so it works fully offline. Verified by `tests/planner-smoke.mjs`.
 5. **Habit day-toggle works.** Each of the 7 day-dots is clickable and the
    streak recalculates from consecutive completions; weekly count (x/7) shown.
-6. **Storage is IndexedDB-first** (database `digitali-ulp`, object store `kv`),
+6. **Storage is IndexedDB-first** (database `plenivostudio-ulp`, object store `kv`),
    with automatic fallback to localStorage and then in-memory storage (with an
    on-screen warning to export a backup if only memory is available). Data
    persists per browser profile; regular JSON backups are recommended

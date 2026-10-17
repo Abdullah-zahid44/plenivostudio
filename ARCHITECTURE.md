@@ -1,11 +1,11 @@
-# Digitali — Architecture
+# Plenivostudio — Architecture
 
 ## Repo
-`Abdullah-zahid44/digitali` — monorepo: marketing site + planner product + docs.
+`Abdullah-zahid44/plenivostudio` — monorepo: marketing site + planner product + docs.
 
 ## Layout
 ```
-digitali/
+plenivostudio/
 ├── README.md                     # project overview, honest status
 ├── ARCHITECTURE.md               # this file
 ├── site/                         # Astro 4+, static output → Cloudflare Pages
@@ -34,7 +34,7 @@ digitali/
 │   ├── packaging/
 │   │   ├── README.md / QUICKSTART.md / LICENSE.txt / CHANGELOG.md / BROWSER-SUPPORT.md
 │   └── dist/
-│       └── digitali-ultimate-life-planner-1.0.0.zip
+│       └── plenivostudio-ultimate-life-planner-1.0.0.zip
 ├── docs/
 │   ├── DEPLOYMENT-cloudflare.md
 │   ├── LEMON-SQUEEZY-SETUP.md
@@ -53,7 +53,7 @@ digitali/
 
 ## Planner (product) engineering
 - Single HTML file. Zero external requests (no CDNs, fonts, analytics). System font stacks.
-- Storage: async adapter — IndexedDB (`digitali-db`, store `kv`) primary,
+- Storage: async adapter — IndexedDB (`plenivostudio-db`, store `kv`) primary,
   localStorage fallback, in-memory fallback. Honest banner if only memory works
   (e.g. some file:// contexts): "changes won't persist — use Export".
 - State: one JSON doc, versioned schema (`schemaVersion: 1`). Export/import with

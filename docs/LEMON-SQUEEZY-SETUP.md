@@ -1,6 +1,6 @@
-# Lemon Squeezy Setup — Digitali
+# Lemon Squeezy Setup — Plenivostudio
 
-Digitali uses Lemon Squeezy as the Merchant of Record (MoR): they handle
+Plenivostudio uses Lemon Squeezy as the Merchant of Record (MoR): they handle
 payment processing, VAT/sales-tax collection and remittance, invoicing, and
 secure digital file delivery. This document covers merchant approval, product
 setup, wiring the checkout into the site, and testing.
@@ -21,14 +21,14 @@ setup, wiring the checkout into the site, and testing.
 
 ## Part 2 — Create the store, product, and variant
 
-1. In the Lemon Squeezy dashboard, create a store (e.g. "Digitali").
+1. In the Lemon Squeezy dashboard, create a store (e.g. "Plenivostudio").
 2. Create a product: **Ultimate Offline Life Planner**.
 3. Add a variant for the one-time purchase (price: **$29.00 USD**, one-time —
    this must match `site/src/config/products.ts`; never display a different
    price on the site).
 4. Under the product's **Files** / digital delivery settings, upload the
    distributable ZIP:
-   `planner/dist/digitali-ultimate-life-planner-1.0.0.zip`
+   `planner/dist/plenivostudio-ultimate-life-planner-1.0.0.zip`
    and attach it to the variant so buyers receive a download link after
    purchase. Re-upload the ZIP here whenever you ship a new planner version.
 

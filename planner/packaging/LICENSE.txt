@@ -1,9 +1,9 @@
-DIGITALI — ULTIMATE OFFLINE LIFE PLANNER
+PLENIVOSTUDIO — ULTIMATE OFFLINE LIFE PLANNER
 SINGLE-USER DIGITAL LICENSE
 Version 1.0 — October 2026
 
 This is a draft license. [MERCHANT CONFIG: legal business/individual name]
-("Digitali", "we") grants you ("you", the purchaser) the following rights
+("Plenivostudio", "we") grants you ("you", the purchaser) the following rights
 in the Ultimate Offline Life Planner software ("the Software").
 
 1. GRANT OF LICENSE
@@ -25,7 +25,7 @@ in the Ultimate Offline Life Planner software ("the Software").
        without our prior written permission.
 
 4. OWNERSHIP
-   The Software is licensed, not sold. Digitali retains all ownership and
+   The Software is licensed, not sold. Plenivostudio retains all ownership and
    intellectual property rights.
 
 5. YOUR DATA
@@ -44,7 +44,7 @@ in the Ultimate Offline Life Planner software ("the Software").
    the user; you are responsible for keeping backups of your data.
 
 8. LIMITATION OF LIABILITY
-   To the maximum extent permitted by law, Digitali shall not be liable for
+   To the maximum extent permitted by law, Plenivostudio shall not be liable for
    any indirect, incidental, or consequential damages, including loss of data,
    arising from use of the Software. Our total liability shall not exceed the
    amount you paid for the Software.

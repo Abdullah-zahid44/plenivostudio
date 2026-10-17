@@ -1,4 +1,4 @@
-# Digitali — Pre-Launch Verification Checklist
+# Plenivostudio — Pre-Launch Verification Checklist
 
 Complete every item before announcing the site publicly or accepting payments.
 Check the box only when the item is genuinely done — not "will do later".
@@ -26,7 +26,7 @@ Check the box only when the item is genuinely done — not "will do later".
 - [ ] `planner/ultimate-life-planner.html` is the final release build.
 - [ ] `planner/demo.html` exists, is clearly labeled as a demo, uses isolated
       sample data, and never touches a purchaser's real data.
-- [ ] `planner/dist/digitali-ultimate-life-planner-1.0.0.zip` exists and
+- [ ] `planner/dist/plenivostudio-ultimate-life-planner-1.0.0.zip` exists and
       contains: the planner HTML, `packaging/README.md`, `packaging/QUICKSTART.md`,
       `packaging/LICENSE.txt`, `packaging/CHANGELOG.md`, `packaging/BROWSER-SUPPORT.md`.
 - [ ] The ZIP uploaded to Lemon Squeezy is byte-identical to the local dist ZIP.

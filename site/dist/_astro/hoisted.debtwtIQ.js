@@ -1,0 +1,1 @@
+import"./hoisted.QYFEDPzK.js";document.querySelectorAll(".faq-question").forEach(e=>{e.addEventListener("click",()=>{const t=e.getAttribute("aria-expanded")==="true",r=document.getElementById(e.getAttribute("aria-controls")||"");e.setAttribute("aria-expanded",String(!t)),r&&(r.hidden=t);const i=e.querySelector(".faq-icon");i&&(i.textContent=t?"+":"–")})});

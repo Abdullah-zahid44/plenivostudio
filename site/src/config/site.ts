@@ -13,7 +13,7 @@
 
 export const site = {
   /** Temporary editable brand name — confirm before production release. */
-  brandName: 'Digitali',
+  brandName: 'Plenivostudio',
   tagline: 'Offline digital planners you buy once and own.',
   description:
     'Beautifully designed offline digital planning tools. One-time purchase, no subscriptions. Your planning data stays on your device.',
@@ -21,7 +21,7 @@ export const site = {
   canonicalUrl:
     typeof process !== 'undefined' && process.env.SITE_URL
       ? process.env.SITE_URL
-      : 'https://digitali.pages.dev',
+      : 'https://plenivostudio.pages.dev',
   /**
    * CONFIG ITEM — owner must supply a verified contact email before launch.
    * Until set, the contact page shows a "not configured" notice.

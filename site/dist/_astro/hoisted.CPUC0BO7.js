@@ -1,0 +1,1 @@
+import"./hoisted.QYFEDPzK.js";const s=document.getElementById("product-search"),d=Array.from(document.querySelectorAll(".product-entry")),r=document.getElementById("no-results");s?.addEventListener("input",()=>{const e=s.value.trim().toLowerCase();let t=0;d.forEach(n=>{const c=n.dataset.search||"",o=e===""||c.includes(e);n.hidden=!o,o&&t++}),r&&(r.hidden=t>0)});

@@ -11,7 +11,7 @@ unresolved. For each item: why it is needed, and where it goes.
   deceptive and can breach payment-provider terms.
 - **Where it goes:** `site/src/config/site.ts` (`legalName`); Privacy, Terms,
   License pages; Lemon Squeezy store settings.
-- **Note:** "Digitali" is a temporary, editable brand name until confirmed.
+- **Note:** "Plenivostudio" is a temporary, editable brand name until confirmed.
 
 ## 2. Contact email (real, monitored)
 

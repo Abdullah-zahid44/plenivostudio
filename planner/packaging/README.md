@@ -2,7 +2,7 @@
 
 ## What this is
 
-The Ultimate Offline Life Planner by Digitali is a personal planning
+The Ultimate Offline Life Planner by Plenivostudio is a personal planning
 application delivered as a **single self-contained HTML file**. You buy it
 once, download it, and open it in your web browser — no installation, no
 account, no subscription, no internet connection required for daily use.
@@ -59,7 +59,7 @@ inside the planner.
 ## Getting help
 
 - In-app: open the Help panel (the `?` button) for a feature tour.
-- Web: visit the Digitali contact page for support options.
+- Web: visit the Plenivostudio contact page for support options.
 
 ## License
 

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://plenivostudio.pages.dev/sitemap-index.xml

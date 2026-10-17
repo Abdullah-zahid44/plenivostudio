@@ -3,7 +3,7 @@
 # Connect the `site/` directory as the Pages project root, or build locally
 # and deploy `dist/`.
 
-name = "digitali"
+name = "plenivostudio"
 compatibility_date = "2026-10-01"
 
 [build]

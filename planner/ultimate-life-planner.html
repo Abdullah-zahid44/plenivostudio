@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ultimate Offline Life Planner — Digitali</title>
+  <title>Ultimate Offline Life Planner — Plenivostudio</title>
         <style>
     :root {
       --font-serif: 'Playfair Display', Georgia, serif;
@@ -807,7 +807,7 @@
     }
   </style>
   <style>
-/* ===== Digitali extensions ===== */
+/* ===== Plenivostudio extensions ===== */
 .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-top:4px}
 .week-day{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:12px;min-height:180px}
 .week-day.today{border-color:var(--accent);box-shadow:0 0 0 2px var(--tint)}
@@ -845,9 +845,9 @@
     <aside id="sidebar">
     <div class="sidebar-header">
       <div class="logo-area">
-        <div class="logo-icon">D</div>
+        <div class="logo-icon">P</div>
         <div class="logo-text">
-          <h1>Digitali</h1>
+          <h1>Plenivostudio</h1>
           <small>Ultimate Life Planner</small>
         </div>
       </div>
@@ -1271,7 +1271,7 @@
         </div>
         <div class="card" style="max-width: 540px;">
           <h3 style="font-family: var(--font-serif); font-size: 18px; margin-bottom: 10px;">Your Data Never Leaves Your Device</h3>
-          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Digitali stores your data in this browser (IndexedDB when available, otherwise local storage). Export a backup JSON file regularly — browsers can clear site data, and no backup means no recovery.</p>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Plenivostudio stores your data in this browser (IndexedDB when available, otherwise local storage). Export a backup JSON file regularly — browsers can clear site data, and no backup means no recovery.</p>
           <div style="display: flex; gap: 12px;">
             <button class="btn-primary" onclick="exportData()">📥 Export JSON Backup</button>
             <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📤 Restore Backup</button>
@@ -1416,7 +1416,7 @@
 
   <script>
     const DEMO_MODE = false;
-const STORE_KEY = DEMO_MODE ? 'digitali_ulp_demo_v1' : 'digitali_ulp_v1';
+const STORE_KEY = DEMO_MODE ? 'plenivostudio_ulp_demo_v1' : 'plenivostudio_ulp_v1';
 
 /* Async storage: IndexedDB primary, localStorage fallback, memory fallback.
    Never throws to callers. */
@@ -1426,7 +1426,7 @@ const Store = {
     return new Promise((resolve) => {
       try {
         if (!('indexedDB' in window)) return resolve();
-        const rq = indexedDB.open('digitali-ulp', 1);
+        const rq = indexedDB.open('plenivostudio-ulp', 1);
         rq.onupgradeneeded = () => { rq.result.createObjectStore('kv', { keyPath: 'k' }); };
         rq.onsuccess = () => { Store._db = rq.result; resolve(); };
         rq.onerror = () => resolve();
@@ -2179,7 +2179,7 @@ async function boot() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
       const dlAnchor = document.createElement('a');
       dlAnchor.setAttribute("href", dataStr);
-      dlAnchor.setAttribute("download", `digitali_planner_backup_${new Date().toISOString().split('T')[0]}.json`);
+      dlAnchor.setAttribute("download", `plenivostudio_planner_backup_${new Date().toISOString().split('T')[0]}.json`);
       document.body.appendChild(dlAnchor);
       dlAnchor.click();
       dlAnchor.remove();
@@ -2220,7 +2220,7 @@ async function boot() {
     }
 
     
-/* ================= DIGITALI EXTENSIONS ================= */
+/* ================= PLENIVOSTUDIO EXTENSIONS ================= */
 let weekOffset = 0;
 let journalMood = '';
 
@@ -2444,12 +2444,12 @@ function downloadCSV(name, rows) {
   a.download = name; document.body.appendChild(a); a.click(); a.remove();
 }
 function exportTasksCSV() {
-  downloadCSV('digitali_tasks.csv', [['title','completed','priority','category','dueDate','recurrence'],
+  downloadCSV('plenivostudio_tasks.csv', [['title','completed','priority','category','dueDate','recurrence'],
     ...state.tasks.map(t => [t.title, t.completed ? 'yes' : 'no', t.priority || '', t.category || '', t.dueDate || '', t.recurrence || 'none'])]);
   showToast('Tasks CSV exported');
 }
 function exportBudgetCSV() {
-  downloadCSV('digitali_budget.csv', [['date','type','category','amount','note'],
+  downloadCSV('plenivostudio_budget.csv', [['date','type','category','amount','note'],
     ...state.budget.map(t => [t.date, t.type, t.category, t.amount, t.note || ''])]);
   showToast('Budget CSV exported');
 }

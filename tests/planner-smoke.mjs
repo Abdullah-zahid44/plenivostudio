@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * planner-smoke.mjs — Playwright smoke tests for the Digitali planner.
+ * planner-smoke.mjs — Playwright smoke tests for the Plenivostudio planner.
  *
  * Usage:
  *   node tests/planner-smoke.mjs [path/to/planner.html]
@@ -154,7 +154,7 @@ async function main() {
       page.waitForEvent('download', { timeout: 8000 }),
       page.evaluate(() => window.exportData()),
     ]);
-    exportPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'digitali-')), 'backup.json');
+    exportPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'plenivostudio-')), 'backup.json');
     await download.saveAs(exportPath);
     const parsed = JSON.parse(fs.readFileSync(exportPath, 'utf8'));
     if (!Array.isArray(parsed.tasks)) throw new Error('exported JSON has no tasks array');
