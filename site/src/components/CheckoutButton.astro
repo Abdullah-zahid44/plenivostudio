@@ -6,7 +6,7 @@ import type { Product } from '../config/products';
  * Purchase button with honest states.
  * - When checkout is disabled: a disabled button explaining that purchasing
  *   opens after store activation. It never pretends to complete a purchase.
- * - When enabled: a real link to the hosted Lemon Squeezy checkout URL.
+ * - When enabled: a real link to the hosted checkout URL of the configured payment provider.
  */
 interface Props {
   product: Product;
@@ -24,7 +24,7 @@ const ready = checkout.enabled && variantUrl !== '';
         Buy now — one-time purchase
       </a>
       <p class="small muted" style="margin-top: 0.75rem;">
-        Secure checkout provided by Lemon Squeezy. You will be redirected to complete
+        Secure checkout. You will be redirected to complete
         your purchase.
       </p>
     </div>

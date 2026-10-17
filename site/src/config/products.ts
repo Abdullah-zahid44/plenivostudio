@@ -3,7 +3,7 @@
  * render prices from this file, never hard-code a different price.
  *
  * priceUSD is an editable configuration value. Changing it here updates the
- * whole site. It must match the configured Lemon Squeezy variant price
+ * whole site. It must match the configured payment provider variant price
  * before checkout is enabled (see checkout.ts).
  */
 
@@ -12,7 +12,7 @@ export interface Product {
   slug: string;
   name: string;
   tagline: string;
-  /** Editable price in USD. Must match the Lemon Squeezy variant price. */
+  /** Editable price in USD. Must match the payment provider variant price. */
   priceUSD: number;
   currency: 'USD';
   version: string;
