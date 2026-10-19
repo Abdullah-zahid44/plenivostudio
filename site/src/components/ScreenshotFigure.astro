@@ -1,8 +1,16 @@
 ---
 /**
- * Image with accessible alt text and lazy loading.
- * Screenshot files are generated from the real running planner
- * (see planner/packaging). Paths below must match public/screenshots/.
+ * Accessible figure for product screenshots.
+ *
+ * Screenshots are generated from the real running planner and live in
+ * public/screenshots/ — never swap in stock or mock imagery.
+ *
+ * Motion hooks (see public/scripts/motion.js):
+ * - tilt: adds data-tilt (+data-tilt-max) for pointer-driven 3D tilt.
+ * - stack: adds data-stack for the CSS "paper stack" hover treatment.
+ * - reveal: adds data-reveal="up|left|right|scale" (+data-reveal-delay).
+ * All hooks are progressive enhancement — without JS the figure is static
+ * and fully visible.
  */
 interface Props {
   src: string;
@@ -11,18 +19,107 @@ interface Props {
   eager?: boolean;
   width?: number;
   height?: number;
+  tilt?: boolean;
+  tiltMax?: number;
+  stack?: boolean;
+  reveal?: 'up' | 'left' | 'right' | 'scale';
+  revealDelay?: number;
 }
-const { src, alt, caption, eager = false, width = 1200, height = 800 } = Astro.props;
+const {
+  src,
+  alt,
+  caption,
+  eager = false,
+  width = 1500,
+  height = 1000,
+  tilt = false,
+  tiltMax = 8,
+  stack = false,
+  reveal,
+  revealDelay,
+} = Astro.props;
 ---
 
-<figure class="hero-figure">
-  <img
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    loading={eager ? 'eager' : 'lazy'}
-    fetchpriority={eager ? 'high' : 'auto'}
-  />
+<figure
+  class="shot"
+  data-tilt={tilt || undefined}
+  data-tilt-max={tilt ? tiltMax : undefined}
+  data-stack={stack || undefined}
+  data-reveal={reveal}
+  data-reveal-delay={revealDelay}
+>
+  <span class="shot-frame">
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding="async"
+    />
+  </span>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
+
+<style>
+  .shot {
+    margin: 0;
+  }
+  .shot-frame {
+    position: relative;
+    display: block;
+    isolation: isolate;
+  }
+  /* Paper-stack sheets: solid paper layers fanned behind the image. */
+  .shot[data-stack] .shot-frame::before,
+  .shot[data-stack] .shot-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    transition: transform 0.35s ease;
+  }
+  .shot[data-stack] .shot-frame::before {
+    transform: rotate(-2.5deg) translate(-7px, 9px);
+    z-index: -1;
+  }
+  .shot[data-stack] .shot-frame::after {
+    transform: rotate(1.75deg) translate(7px, 7px);
+    z-index: -2;
+  }
+  .shot[data-stack]:hover .shot-frame::before {
+    transform: rotate(-4deg) translate(-13px, 13px);
+  }
+  .shot[data-stack]:hover .shot-frame::after {
+    transform: rotate(3deg) translate(12px, 11px);
+  }
+  .shot img {
+    position: relative;
+    z-index: 0;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+    background: var(--card);
+  }
+  .shot figcaption {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    margin-top: 0.9rem;
+    text-align: center;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shot[data-stack] .shot-frame::before,
+    .shot[data-stack] .shot-frame::after {
+      transition: none;
+    }
+    .shot[data-stack]:hover .shot-frame::before {
+      transform: rotate(-2.5deg) translate(-7px, 9px);
+    }
+    .shot[data-stack]:hover .shot-frame::after {
+      transform: rotate(1.75deg) translate(7px, 7px);
+    }
+  }
+</style>

@@ -6,8 +6,8 @@ interface Props {
 const { compact = false } = Astro.props;
 ---
 
-<aside class={compact ? 'notice' : 'notice'} aria-label="Compatibility note">
-  <p style="margin: 0 0 0.5rem;">
+<aside class:list={['compat-note', { 'compat-note--compact': compact }]} aria-label="Compatibility note">
+  <p class="compat-note__title">
     <strong>Compatibility, stated honestly.</strong>
   </p>
   <p class="small muted" style="margin: 0;">
@@ -19,3 +19,21 @@ const { compact = false } = Astro.props;
     of losing data. See the included BROWSER-SUPPORT.md for the full tested matrix.
   </p>
 </aside>
+
+<style>
+  .compat-note {
+    background: var(--lavender-soft, #f3f1fd);
+    border: 1px solid var(--lavender, #e9e6fb);
+    border-left: 4px solid var(--indigo);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+  }
+  .compat-note--compact {
+    padding: 1.1rem 1.25rem;
+  }
+  .compat-note__title {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-ui);
+    font-size: 1.05rem;
+  }
+</style>

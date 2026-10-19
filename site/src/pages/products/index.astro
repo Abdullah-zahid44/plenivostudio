@@ -11,14 +11,19 @@ import { products } from '../../config/products';
 >
   <section class="section-tight">
     <div class="wrap">
-      <p class="eyebrow">Shop</p>
-      <h1>Digital planners, sold once</h1>
-      <p class="lead">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page">Shop</span>
+      </nav>
+      <p class="eyebrow" data-reveal="up">Shop</p>
+      <h1 data-reveal="up" data-reveal-delay="80">Digital planners, sold once</h1>
+      <p class="lead" data-reveal="up" data-reveal-delay="160">
         Every product below is a one-time purchase. No subscriptions, no accounts, no
         cloud — just a file you own.
       </p>
-      <div style="margin: 2rem 0;">
-        <label for="product-search" class="small" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">
+      <div class="shop-search" data-reveal="up" data-reveal-delay="240">
+        <label for="product-search" class="shop-search__label">
           Search products
         </label>
         <input
@@ -29,11 +34,12 @@ import { products } from '../../config/products';
           autocomplete="off"
         />
       </div>
-      <div id="product-list" style="display: grid; gap: 2rem;">
+      <div id="product-list" class="shop-list">
         {
           products.map((p) => (
             <div
               class="product-entry"
+              data-reveal="up"
               data-search={`${p.name} ${p.tagline} ${p.features.join(' ')}`.toLowerCase()}
             >
               <ProductCard product={p} />
@@ -47,6 +53,31 @@ import { products } from '../../config/products';
     </div>
   </section>
 </Base>
+
+<style>
+  .breadcrumb {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    margin-bottom: 1.5rem;
+  }
+  .breadcrumb a {
+    color: var(--ink-muted);
+  }
+  .shop-search {
+    margin: 2rem 0;
+    max-width: 28rem;
+  }
+  .shop-search__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .shop-list {
+    display: grid;
+    gap: 2rem;
+  }
+</style>
 
 <script>
   const input = document.getElementById('product-search') as HTMLInputElement | null;

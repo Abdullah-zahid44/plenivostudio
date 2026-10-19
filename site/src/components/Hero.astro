@@ -1,31 +1,149 @@
 ---
-/** Hero section with headline, subheading, CTAs and a real product screenshot. */
-interface Props {
-  title: string;
-  subheading: string;
-  primaryCta: { href: string; label: string };
-  secondaryCta: { href: string; label: string };
-  imageSrc: string;
-  imageAlt: string;
-  imageCaption?: string;
-}
-const { title, subheading, primaryCta, secondaryCta, imageSrc, imageAlt, imageCaption } =
-  Astro.props;
+/**
+ * Homepage hero.
+ *
+ * Honest copy: one private HTML file, one-time purchase, fully offline,
+ * data stays on the device. The visual is built from REAL planner
+ * screenshots (public/screenshots/) — no fake UI mockups — layered into a
+ * 3D paper stack with the design-system motion hooks (data-tilt, data-stack,
+ * data-reveal). All motion respects prefers-reduced-motion in motion.js.
+ */
+import { products } from '../config/products';
+import { site } from '../config/site';
+
+const product = products[0];
 ---
 
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <h1>{title}</h1>
-      <p class="lead">{subheading}</p>
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="container hero-grid">
+    <div class="hero-copy" data-reveal="up">
+      <p class="eyebrow">{site.brandName}</p>
+      <h1 id="hero-heading">Plan your life in one private file.</h1>
+      <p class="lead">
+        {product.name} is a one-time purchase. It runs entirely offline in your
+        browser, and your data never leaves your device.
+      </p>
       <div class="hero-ctas">
-        <a class="btn btn-primary" href={primaryCta.href}>{primaryCta.label}</a>
-        <a class="btn btn-secondary" href={secondaryCta.href}>{secondaryCta.label}</a>
+        <a class="btn btn-primary" href="/demo">Try free demo</a>
+        <a class="btn btn-secondary" href={`/products/${product.slug}`}>View product</a>
       </div>
     </div>
-    <figure class="hero-figure">
-      <img src={imageSrc} alt={imageAlt} width="1200" height="800" fetchpriority="high" />
-      {imageCaption && <figcaption>{imageCaption}</figcaption>}
+
+    <figure class="hero-visual" data-reveal="scale" data-tilt data-tilt-max="7" data-stack>
+      <div class="paper-stack">
+        <img
+          src="/screenshots/planner-habits.svg"
+          alt=""
+          width="1200"
+          height="800"
+          loading="lazy"
+        />
+        <img
+          src="/screenshots/planner-tasks.svg"
+          alt=""
+          width="1200"
+          height="800"
+          loading="lazy"
+        />
+        <img
+          src="/screenshots/planner-dashboard.svg"
+          alt={`${product.name} — dashboard showing today's date, priorities, tasks and habit progress`}
+          width="1200"
+          height="800"
+          fetchpriority="high"
+        />
+      </div>
+      <figcaption class="small muted">
+        Actual screenshots of the running planner — no mockups.
+      </figcaption>
     </figure>
   </div>
 </section>
+
+<style>
+  /* ------------------------------------------------------------------
+   * FALLBACK STYLES — homepage hero only.
+   * Uses design-system hooks when present (.container, .section, .eyebrow,
+   * .btn, --paper/--ink/--line/--card/--radius/--font-display/--font-ui).
+   * If the rebuilt global.css already covers these classes, these rules
+   * only add the hero-specific layout below. Remove this block once the
+   * design-system rebuild is verified to cover the hero.
+   * ------------------------------------------------------------------ */
+  .hero {
+    padding: clamp(2.5rem, 6vw, 5rem) 0;
+  }
+  .hero-grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .hero-grid {
+      grid-template-columns: 1fr 1.1fr;
+    }
+  }
+  .hero-copy .eyebrow {
+    margin: 0 0 0.75rem;
+  }
+  .hero h1 {
+    font-family: var(--font-display, Georgia, 'Times New Roman', serif);
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem;
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 34rem;
+    margin: 0;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+    margin-top: 1.75rem;
+  }
+  .hero-visual {
+    margin: 0;
+    perspective: 1200px;
+  }
+  .paper-stack {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+  .paper-stack img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--card, #fff);
+    border: 1px solid var(--line, #e5e3dc);
+    border-radius: var(--radius, 12px);
+    box-shadow: 0 24px 48px -24px rgba(22, 24, 29, 0.25);
+  }
+  /* Stacked sheets sit behind the front screenshot; absolute layers are
+     decorative (alt="") so screen readers hear only the front image. */
+  .paper-stack img:nth-child(1) {
+    position: absolute;
+    inset: 0;
+    transform: translateZ(-60px) translate(16px, 16px);
+  }
+  .paper-stack img:nth-child(2) {
+    position: absolute;
+    inset: 0;
+    transform: translateZ(-30px) translate(8px, 8px);
+  }
+  .paper-stack img:nth-child(3) {
+    position: relative;
+    transform: translateZ(0);
+  }
+  .hero-visual figcaption {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .paper-stack img {
+      transform: none !important;
+    }
+  }
+</style>
