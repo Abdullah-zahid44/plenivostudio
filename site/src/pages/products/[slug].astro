@@ -1,0 +1,853 @@
+---
+import Base from '../../layouts/Base.astro';
+import CheckoutButton from '../../components/CheckoutButton.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScreenshotFigure from '../../components/ScreenshotFigure.astro';
+import CompatibilityNote from '../../components/CompatibilityNote.astro';
+import { site } from '../../config/site';
+import { products, formatPrice, type Product } from '../../config/products';
+
+/**
+ * Product detail template. Every product page (/products/<slug>) is generated
+ * from the catalog in config/products.ts — no hand-written pages per product.
+ */
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+interface Props {
+  product: Product;
+}
+const { product } = Astro.props;
+
+const heroShot =
+  product.screenshots.find((s) => s.role === 'hero') ?? product.screenshots[0];
+const phoneShot = product.screenshots.find((s) => s.role === 'phone');
+const zipShot = product.screenshots.find((s) => s.src === product.zipScreenshot);
+
+/** Tour rows pair real screenshots with the product's own feature copy. */
+const tour = (product.tour ?? []).map((row) => {
+  const shot = product.screenshots.find((s) => s.src === row.screenshot);
+  return {
+    title: row.title,
+    text: row.text,
+    src: row.screenshot,
+    alt: shot?.alt ?? `${product.name} — ${row.title}`,
+    caption: shot?.caption ?? row.title,
+    width: shot?.width ?? 1500,
+    height: shot?.height ?? 1000,
+  };
+});
+
+const faqs = product.faqs ?? [];
+const views = product.views ?? [];
+const comparison = product.comparison;
+
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  description: product.description,
+  brand: { '@type': 'Brand', name: site.brandName },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: product.currency,
+    price: product.priceUSD.toFixed(2),
+    availability: 'https://schema.org/InStock',
+  },
+};
+---
+
+<Base
+  title={product.name}
+  description={`${product.tagline} One-time purchase of ${formatPrice(product.priceUSD)}. Works offline — your data stays on your device.`}
+  path={`/products/${product.slug}`}
+  productJsonLd={productJsonLd}
+>
+  <!-- Hero -->
+  <section class="section-tight">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true"> / </span>
+        <a href="/products">Shop</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page">{product.name}</span>
+      </nav>
+      <div class="pdp-hero">
+        <div class="pdp-hero__copy">
+          <p class="eyebrow" data-reveal="up">Digital planner · Version {product.version}</p>
+          <h1 data-reveal="up" data-reveal-delay="80">{product.name}</h1>
+          <p class="lead" data-reveal="up" data-reveal-delay="160">{product.tagline}</p>
+          <p class="pdp-price" data-reveal="up" data-reveal-delay="240">
+            <span class="price">{formatPrice(product.priceUSD)}</span>
+            <span class="price-note"> one-time purchase · version {product.version}</span>
+          </p>
+          <div class="pdp-ctas" data-reveal="up" data-reveal-delay="320">
+            <CheckoutButton product={product} />
+            <a class="btn btn-secondary" href={product.demoPath}>Try the free demo</a>
+          </div>
+          <p class="small muted" data-reveal="up" data-reveal-delay="400">
+            Works offline in a modern browser. Your data stays on your device.
+          </p>
+        </div>
+        <div class="pdp-hero__media" data-reveal="scale" data-reveal-delay="200">
+          {heroShot && (
+            <ScreenshotFigure
+              src={heroShot.src}
+              alt={heroShot.alt}
+              caption={heroShot.caption}
+              eager
+              tilt
+              tiltMax={7}
+              stack
+              width={heroShot.width}
+              height={heroShot.height}
+            />
+          )}
+          {phoneShot && (
+            <img
+              class="pdp-hero__phone"
+              src={phoneShot.src}
+              alt={phoneShot.alt}
+              width={phoneShot.width}
+              height={phoneShot.height}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Honest facts strip -->
+  <section class="section-tight" aria-label="Key facts">
+    <div class="wrap">
+      <ul class="facts">
+        <li data-reveal="up"><strong>One-time purchase</strong><span>Pay once, yours forever.</span></li>
+        <li data-reveal="up" data-reveal-delay="80"><strong>No subscription</strong><span>Nothing renews, ever.</span></li>
+        <li data-reveal="up" data-reveal-delay="160"><strong>No account</strong><span>Open the file and plan.</span></li>
+        <li data-reveal="up" data-reveal-delay="240"><strong>Works offline</strong><span>Zero network calls.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Comparison: one-time vs subscriptions (only when the product defines one) -->
+  {comparison && (
+    <section class="section-tight" aria-labelledby="compare-heading">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal="up">{comparison.eyebrow}</p>
+        <h2 id="compare-heading" data-reveal="up" data-reveal-delay="80">{comparison.heading}</h2>
+        <p class="lead" data-reveal="up" data-reveal-delay="160">{comparison.intro}</p>
+        <div
+          class="table-scroll"
+          role="region"
+          aria-label="Planner comparison table — scroll horizontally on small screens"
+          tabindex="0"
+          data-reveal="up"
+          data-reveal-delay="240"
+        >
+          <table class="compare">
+            <caption>{comparison.caption}</caption>
+            <thead>
+              <tr>
+                <th scope="col"><span class="visually-hidden">Dimension</span></th>
+                <th scope="col" class="col-ours">
+                  {site.brandName}
+                  <span class="compare-sub">{comparison.ourColumnSub}</span>
+                </th>
+                {comparison.competitors.map((c) => (
+                  <th scope="col">{c.name}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Price</th>
+                <td class="col-ours">{formatPrice(product.priceUSD)} one-time</td>
+                {comparison.competitors.map((c) => <td>{c.price}</td>)}
+              </tr>
+              <tr>
+                <th scope="row">Billing model</th>
+                <td class="col-ours">One-time purchase</td>
+                {comparison.competitors.map((c) => <td>{c.billing}</td>)}
+              </tr>
+              <tr>
+                <th scope="row">Account required</th>
+                <td class="col-ours">No</td>
+                {comparison.competitors.map((c) => <td>{c.account}</td>)}
+              </tr>
+              <tr>
+                <th scope="row">Where your data lives</th>
+                <td class="col-ours">On your device</td>
+                {comparison.competitors.map((c) => <td>{c.dataLocation}</td>)}
+              </tr>
+              <tr>
+                <th scope="row">Fully offline (no cloud needed)</th>
+                <td class="col-ours">Yes</td>
+                {comparison.competitors.map((c) => <td>{c.offline}</td>)}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted" data-reveal="up" data-reveal-delay="320" style="margin-top: 1rem;">
+          {comparison.footnote}
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- Tour -->
+  {tour.length > 0 && (
+    <section class="section-tight" aria-labelledby="tour-heading">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal="up">Take the tour</p>
+        <h2 id="tour-heading" data-reveal="up" data-reveal-delay="80">
+          Screenshots from the real planner
+        </h2>
+        <p class="lead" data-reveal="up" data-reveal-delay="160">
+          Every image on this page is captured from the actual product — not a mockup.
+        </p>
+        <div class="tour">
+          {
+            tour.map((row, i) => (
+              <div class="tour-row">
+                <div class="tour-row__text" data-reveal={i % 2 === 0 ? 'left' : 'right'}>
+                  <h3>{row.title}</h3>
+                  <p class="muted" style="margin: 0;">{row.text}</p>
+                </div>
+                <div class="tour-row__media" data-reveal={i % 2 === 0 ? 'right' : 'left'}>
+                  <ScreenshotFigure
+                    src={row.src}
+                    alt={row.alt}
+                    caption={row.caption}
+                    tilt
+                    tiltMax={6}
+                    width={row.width}
+                    height={row.height}
+                  />
+                </div>
+              </div>
+            ))
+          }
+          {phoneShot && (
+            <div class="tour-row">
+              <div class="tour-row__text" data-reveal="right">
+                <h3>On your phone too</h3>
+                <p class="muted" style="margin: 0;">
+                  Mobile browsers (iOS Safari, Android Chrome) are supported for viewing
+                  and everyday use — the same single file, nothing to install.
+                </p>
+              </div>
+              <div class="tour-row__media tour-row__media--phone" data-reveal="left">
+                <ScreenshotFigure
+                  src={phoneShot.src}
+                  alt={phoneShot.alt}
+                  caption={phoneShot.caption}
+                  tilt
+                  tiltMax={8}
+                  width={phoneShot.width}
+                  height={phoneShot.height}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- All views -->
+  {views.length > 0 && (
+    <section class="section-tight" aria-labelledby="views-heading">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal="up">Everything included</p>
+        <h2 id="views-heading" data-reveal="up" data-reveal-delay="80">
+          All {views.length} views, in one file
+        </h2>
+        <ul class="views-list">
+          {views.map((v, i) => (
+            <li data-reveal="up" data-reveal-delay={(i % 6) * 60}>{v}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- Detailed features (copy from the product catalog — never rewritten) -->
+  <section class="section-tight" aria-labelledby="features-heading">
+    <div class="wrap">
+      <h2 id="features-heading" data-reveal="up">In detail</h2>
+      <div class="feature-grid">
+        {
+          product.detailedFeatures.map((f, i) => (
+            <div class="feature-card" data-reveal="up" data-reveal-delay={(i % 3) * 80}>
+              <h3>{f.title}</h3>
+              <p class="muted" style="margin: 0;">
+                {f.description}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- What's in the ZIP -->
+  <section class="section-tight" aria-labelledby="included-heading">
+    <div class="wrap zip">
+      <div class="zip__copy">
+        <p class="eyebrow" data-reveal="up">What you get</p>
+        <h2 id="included-heading" data-reveal="up" data-reveal-delay="80">What's in the ZIP</h2>
+        <p class="muted" data-reveal="up" data-reveal-delay="160">
+          A ZIP archive with the planner, plain-language docs and your license —
+          nothing hidden, nothing extra to buy.
+        </p>
+        <ul class="zip__list" data-reveal="up" data-reveal-delay="240">
+          {product.whatsIncluded.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      {zipShot && (
+        <div class="zip__media" data-reveal="scale" data-reveal-delay="200">
+          <ScreenshotFigure
+            src={zipShot.src}
+            alt={zipShot.alt}
+            caption={zipShot.caption}
+            stack
+            width={zipShot.width}
+            height={zipShot.height}
+          />
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Requirements & limitations -->
+  <section class="section-tight" aria-labelledby="req-heading">
+    <div class="wrap">
+      <h2 id="req-heading" data-reveal="up">Requirements &amp; limitations</h2>
+      <div class="req-grid">
+        <div data-reveal="up" data-reveal-delay="80">
+          <h3>Requirements</h3>
+          <ul class="check-list">
+            {product.requirements.map((r) => <li>{r}</li>)}
+          </ul>
+        </div>
+        <div data-reveal="up" data-reveal-delay="160">
+          <h3>Limitations — please read before buying</h3>
+          <ul class="warn-list">
+            {product.limitations.map((l) => <li>{l}</li>)}
+          </ul>
+        </div>
+      </div>
+      <div data-reveal="up" data-reveal-delay="240" style="margin-top: 2rem;">
+        <CompatibilityNote />
+      </div>
+    </div>
+  </section>
+
+  <!-- License + buy -->
+  <section class="section-tight" aria-labelledby="license-heading">
+    <div class="wrap">
+      <h2 id="license-heading" data-reveal="up">License</h2>
+      <p class="lead" data-reveal="up" data-reveal-delay="80">
+        Single-user digital license: you may use the planner on your own devices and
+        keep backups for personal use. Redistribution, resale or sharing the file is
+        not permitted. <a href="/license">Read the full license</a>.
+      </p>
+      <div class="buy-panel" data-reveal="up" data-reveal-delay="160">
+        <h2 id="buy-heading">Get the planner</h2>
+        <p class="buy-panel__price">
+          <span class="price">{formatPrice(product.priceUSD)}</span>
+          <span class="price-note"> one-time purchase · version {product.version}</span>
+        </p>
+        <div class="buy-panel__ctas">
+          <CheckoutButton product={product} />
+          <a class="btn btn-secondary" href="/refund-policy">Refund policy</a>
+          <a class="btn btn-secondary" href="/faq">Questions? Read the FAQ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product FAQ -->
+  {faqs.length > 0 && (
+    <section class="section-tight" aria-labelledby="pfaq-heading">
+      <div class="wrap" style="max-width: 800px;">
+        <h2 id="pfaq-heading" data-reveal="up">Product questions</h2>
+        <div data-reveal="up" data-reveal-delay="120">
+          <FaqAccordion items={faqs} headingLevel="h3" />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Sticky mobile CTA: demo link + dismiss. Mobile only (see CSS). -->
+  <aside class="sticky-cta" id="sticky-cta" aria-label="Quick actions" hidden>
+    <a class="btn btn-primary sticky-cta__btn" href={product.demoPath}>Try free demo</a>
+    <button class="sticky-cta__dismiss" type="button" aria-label="Dismiss">
+      <span aria-hidden="true">✕</span>
+    </button>
+  </aside>
+</Base>
+
+<script>
+  (function () {
+    const mq = window.matchMedia('(max-width: 760px)');
+    let dismissed = false;
+    try {
+      dismissed = window.sessionStorage.getItem('stickyCtaDismissed') === '1';
+    } catch (e) {
+      dismissed = false;
+    }
+
+    function getBar() {
+      return document.getElementById('sticky-cta');
+    }
+
+    function sync() {
+      const el = getBar();
+      if (!el) return;
+      const show = mq.matches && !dismissed;
+      el.hidden = !show;
+      document.body.classList.toggle('has-sticky-cta', show);
+      if (show) {
+        document.body.style.setProperty('--sticky-cta-h', el.offsetHeight + 'px');
+      } else {
+        document.body.style.removeProperty('--sticky-cta-h');
+      }
+    }
+
+    getBar()
+      ?.querySelector('.sticky-cta__dismiss')
+      ?.addEventListener('click', function () {
+        dismissed = true;
+        try {
+          window.sessionStorage.setItem('stickyCtaDismissed', '1');
+        } catch (e) {
+          /* storage unavailable — dismissal lasts for this page view */
+        }
+        sync();
+      });
+
+    mq.addEventListener('change', sync);
+    window.addEventListener('resize', sync);
+    sync();
+  })();
+</script>
+
+<style>
+  .breadcrumb {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a {
+    color: var(--ink-muted);
+  }
+
+  /* Hero */
+  .pdp-hero {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+  .pdp-price {
+    margin: 1.5rem 0 1.75rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .pdp-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+  }
+  .pdp-hero__media {
+    position: relative;
+    min-width: 0;
+  }
+  .pdp-hero__phone {
+    position: absolute;
+    left: -1.25rem;
+    bottom: -1.5rem;
+    width: clamp(88px, 22%, 128px);
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+  }
+  @media (max-width: 900px) {
+    .pdp-hero {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .pdp-hero__media {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  /* Facts strip */
+  .facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .facts li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.4rem;
+  }
+  .facts strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  .facts span {
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+  }
+  @media (max-width: 900px) {
+    .facts {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Tour */
+  .tour {
+    display: grid;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+  .tour-row {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .tour-row:nth-child(even) .tour-row__text {
+    order: 2;
+  }
+  .tour-row:nth-child(even) .tour-row__media {
+    order: 1;
+  }
+  .tour-row__media {
+    min-width: 0;
+  }
+  .tour-row__media--phone {
+    max-width: 280px;
+    margin-inline: auto;
+    width: 100%;
+  }
+  @media (max-width: 900px) {
+    .tour {
+      gap: 3rem;
+    }
+    .tour-row {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .tour-row:nth-child(even) .tour-row__text {
+      order: 1;
+    }
+    .tour-row:nth-child(even) .tour-row__media {
+      order: 2;
+    }
+  }
+
+  /* Views checklist */
+  .views-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  .views-list li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem 0.9rem 2.6rem;
+    position: relative;
+    font-weight: 500;
+  }
+  .views-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 1.1rem;
+    color: var(--indigo-deep);
+    font-weight: 700;
+  }
+  @media (max-width: 900px) {
+    .views-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .views-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ZIP section */
+  .zip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+  .zip__list {
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .zip__list li {
+    position: relative;
+    padding-left: 1.75rem;
+    color: var(--ink-soft);
+  }
+  .zip__list li::before {
+    content: '–';
+    position: absolute;
+    left: 0.25rem;
+    color: var(--indigo-deep);
+    font-weight: 700;
+  }
+  @media (max-width: 900px) {
+    .zip {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  /* Requirements */
+  .req-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+  }
+  .check-list,
+  .warn-list {
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .check-list li,
+  .warn-list li {
+    position: relative;
+    padding-left: 1.9rem;
+  }
+  .check-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0.25rem;
+    color: var(--indigo-deep);
+    font-weight: 700;
+  }
+  .warn-list li::before {
+    content: '!';
+    position: absolute;
+    left: 0;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background: var(--lavender);
+    color: var(--indigo-deep);
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    top: 0.15rem;
+  }
+  @media (max-width: 900px) {
+    .req-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Buy panel */
+  .buy-panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 2.5rem;
+    margin-top: 2.5rem;
+  }
+  .buy-panel__price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0 1.5rem;
+  }
+  .buy-panel__ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  @media (max-width: 560px) {
+    .buy-panel {
+      padding: 1.75rem;
+    }
+  }
+
+  /* Comparison table */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    margin-top: 2rem;
+    box-shadow: var(--shadow);
+  }
+  .table-scroll:focus-visible {
+    outline: 3px solid var(--indigo);
+    outline-offset: 2px;
+  }
+  .compare {
+    width: 100%;
+    min-width: 660px;
+    border-collapse: collapse;
+    font-size: 0.98rem;
+  }
+  .compare caption {
+    caption-side: bottom;
+    text-align: left;
+    padding: 1rem 1.25rem;
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+  .compare th,
+  .compare td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .compare tbody tr:last-child th,
+  .compare tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .compare thead th {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    background: var(--paper);
+    border-bottom: 2px solid var(--line);
+    white-space: nowrap;
+  }
+  .compare tbody th[scope='row'] {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .compare .col-ours {
+    background: var(--lavender-soft, #f3f1fd);
+  }
+  .compare thead .col-ours {
+    color: var(--indigo-deep);
+    border-bottom: 2px solid var(--indigo);
+  }
+  .compare-sub {
+    display: block;
+    font-family: var(--font-ui);
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+  }
+
+  /* Sticky mobile CTA — mobile only, dismissible */
+  .sticky-cta {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .sticky-cta[hidden] {
+      display: none;
+    }
+    .sticky-cta:not([hidden]) {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      background: var(--card);
+      border-top: 1px solid var(--line);
+      box-shadow: 0 -8px 24px rgba(22, 24, 29, 0.08);
+      padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+      animation: sticky-cta-in 0.3s ease-out;
+    }
+    body.has-sticky-cta {
+      padding-bottom: var(--sticky-cta-h, 84px);
+    }
+  }
+  @keyframes sticky-cta-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  .sticky-cta__btn {
+    flex: 1;
+  }
+  .sticky-cta__dismiss {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sticky-cta__dismiss:hover {
+    border-color: var(--indigo);
+    color: var(--indigo-deep);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta:not([hidden]) {
+      animation: none;
+    }
+  }
+</style>

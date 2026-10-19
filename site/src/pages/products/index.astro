@@ -40,6 +40,7 @@ import { products } from '../../config/products';
             <div
               class="product-entry"
               data-reveal="up"
+              data-category={p.category}
               data-search={`${p.name} ${p.tagline} ${p.features.join(' ')}`.toLowerCase()}
             >
               <ProductCard product={p} />

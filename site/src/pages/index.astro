@@ -9,9 +9,9 @@ import ScrollShowcase from '../components/ScrollShowcase.astro';
 import ProductCard from '../components/ProductCard.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import CompatibilityNote from '../components/CompatibilityNote.astro';
-import { products, formatPrice } from '../config/products';
+import { getFeaturedProduct, formatPrice } from '../config/products';
 
-const product = products[0];
+const product = getFeaturedProduct();
 const priceLabel = formatPrice(product.priceUSD);
 
 const icon = (path: string) =>

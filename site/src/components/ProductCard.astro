@@ -1,33 +1,39 @@
 ---
 import { formatPrice, type Product } from '../config/products';
+import { categoryLabel } from '../config/categories';
 import CheckoutButton from './CheckoutButton.astro';
 import ScreenshotFigure from './ScreenshotFigure.astro';
 
 /**
- * Featured product card: price always from config, honest caveats included.
+ * Product card: price always from config, honest caveats included.
  * Screenshot uses the 3D treatment (tilt + paper stack) via motion hooks.
+ * All display data (screenshot, category) comes from the product catalog —
+ * never hard-code a per-product value here.
  */
 interface Props {
   product: Product;
 }
 const { product } = Astro.props;
+const hero = product.screenshots[0];
 ---
 
 <article class="product-card" aria-labelledby={`product-${product.id}`}>
   <div class="product-card__media">
-    <ScreenshotFigure
-      src="/screenshots/planner-dashboard.svg"
-      alt={`${product.name} — dashboard view showing today's date, priorities, tasks and habit progress`}
-      caption="Dashboard — your day at a glance"
-      tilt
-      tiltMax={7}
-      stack
-      width={1500}
-      height={1000}
-    />
+    {hero && (
+      <ScreenshotFigure
+        src={hero.src}
+        alt={hero.alt}
+        caption={hero.caption}
+        tilt
+        tiltMax={7}
+        stack
+        width={hero.width}
+        height={hero.height}
+      />
+    )}
   </div>
   <div class="product-card__body">
-    <p class="eyebrow">Featured product</p>
+    <p class="eyebrow">{product.featured ? 'Featured product' : categoryLabel(product.category)}</p>
     <h3 id={`product-${product.id}`} class="product-card__title">{product.name}</h3>
     <p class="muted">{product.tagline}</p>
     <p class="product-card__price">
