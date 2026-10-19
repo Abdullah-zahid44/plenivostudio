@@ -1,0 +1,89 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+---
+
+<Base
+  title="Privacy Policy"
+  description="Plenivostudio privacy policy: what this website collects, what the offline planner does with your data, and your rights."
+  path="/privacy"
+>
+  <section class="section-tight legal">
+    <div class="wrap" style="max-width: 780px;">
+      <p class="eyebrow">Legal</p>
+      <h1>Privacy Policy</h1>
+
+      <p class="muted">Last updated: October 2026.</p>
+
+      <p>
+        This policy covers two different things: <strong>(1)</strong> this
+        website ({site.canonicalUrl}), and <strong>(2)</strong> the downloadable
+        planner software. They handle data very differently, so we describe them
+        separately.
+      </p>
+
+      <h2>1. This website</h2>
+      <h3>What we collect</h3>
+      <ul>
+        <li>
+          <strong>Contact messages:</strong> if you email us, we receive your name,
+          email address and message content so we can reply. We use it only for
+          that purpose.
+        </li>
+        <li>
+          <strong>Payments:</strong> when checkout is activated, payment processing
+          is provided by our payment processor as Merchant of Record. They collect and
+          process payment information under their own privacy policy. We do not
+          receive or store your card details.
+        </li>
+      </ul>
+      <h3>What we do not collect on this site</h3>
+      <ul>
+        <li>
+          There is currently <strong>no analytics, no advertising tracking and no
+          cookies</strong> set by this website. If that changes, this policy will
+          be updated before any tracking begins.
+        </li>
+      </ul>
+
+      <h2>2. The downloadable planner</h2>
+      <p>
+        The planner is an offline HTML file that runs entirely in your browser. It:
+      </p>
+      <ul>
+        <li>stores your planning data <strong>locally on your device</strong> (IndexedDB with a localStorage fallback);</li>
+        <li>makes <strong>no network requests</strong> — no analytics, no tracking, no cloud sync, no external fonts or scripts;</li>
+        <li>
+          never transmits your data to us or to anyone else. There is no technical
+          mechanism by which we could see it.
+        </li>
+      </ul>
+      <p>
+        Because your data lives in your browser, clearing browser/site data will
+        remove it. The planner includes a manual JSON export so you can keep your
+        own backups — we recommend using it regularly.
+      </p>
+
+      <h2>Data retention and your rights</h2>
+      <ul>
+        <li>Contact emails are kept only as long as needed to handle your request.</li>
+        <li>
+          Depending on your jurisdiction, you may
+          have rights to access, correct or delete personal data we hold about
+          you. Contact us to exercise them.
+        </li>
+      </ul>
+
+      <h2>Controller</h2>
+      <p>
+        Plenivostudio. Contact: info.cosmicragsltd@gmail.com.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        If we change this policy, we will update the "last updated" date above.
+        Material changes will be announced on this site before they take effect.
+      </p>
+    </div>
+  </section>
+</Base>

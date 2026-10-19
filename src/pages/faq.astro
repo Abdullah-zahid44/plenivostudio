@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+
+const faqs = [
+  {
+    q: 'What does "offline" actually mean for your products?',
+    a: 'Each planner is a single self-contained HTML file. After you download it, everything — the interface, your data, backups — runs in your browser with no internet connection. There are no servers to reach, no accounts to sign in to, and no features that stop working offline.',
+  },
+  {
+    q: 'Is this a subscription?',
+    a: 'No. All Plenivostudio products are sold as one-time purchases. You pay once and keep the file. We will never convert a purchased product into a subscription.',
+  },
+  {
+    q: 'Where is my planning data stored?',
+    a: 'In your own browser on your own device, using IndexedDB with a localStorage fallback. Nothing is transmitted to us or to any third party. If your browser cannot persist data (for example in some private modes or file:// contexts), the planner tells you honestly and offers manual export instead of silently losing your work.',
+  },
+  {
+    q: 'What happens if I clear my browser data?',
+    a: 'Clearing browser/site data will remove the planner\u2019s stored data. This is why the planner includes a one-click JSON export: keep regular backups in a place you control, and you can restore them any time.',
+  },
+  {
+    q: 'Can I use the planner on multiple devices?',
+    a: 'Your single-user license covers you on your own devices. There is no cloud sync, so each copy keeps its own local data. To move data between devices, export a JSON backup on one device and import it on the other.',
+  },
+  {
+    q: 'Which browsers and devices are supported?',
+    a: 'Recent Chrome, Edge, Firefox and Safari on desktop are supported, and mobile browsers work for everyday use. Every product ships with a BROWSER-SUPPORT.md file listing exactly what was tested. We do not claim universal support.',
+  },
+  {
+    q: 'What do I receive when I buy?',
+    a: 'A ZIP archive containing the planner as a single HTML file plus documentation: README, quick-start guide, license, changelog, browser-support matrix and backup instructions.',
+  },
+  {
+    q: 'How do I receive my download after paying?',
+    a: 'Through our payment provider\u2019s approved digital delivery. Once checkout is activated, you will get a download link immediately after purchase. Until then, purchasing is disabled and this site clearly says so.',
+  },
+  {
+    q: 'What is your refund policy?',
+    a: 'Please read the Refund Policy page in full before buying. In short: because these are downloadable digital products, refunds are limited once the file has been downloaded — with the exceptions described in the policy and as required by applicable consumer law.',
+  },
+  {
+    q: 'Is the budget tracker financial advice?',
+    a: 'No. The budget tracker is a simple informational tool for recording income and expenses. It is not financial advice, and we are not financial advisors.',
+  },
+  {
+    q: 'Can I share the file with family or friends?',
+    a: 'The license is for a single user. Please do not redistribute or share the file. If someone else wants it, point them to this site so they can get their own licensed copy.',
+  },
+  {
+    q: 'How do I contact support?',
+    a: 'Use the Contact page — the form opens your email app with your message addressed to us. There is no automated ticketing system; every message is read by a person.',
+  },
+];
+
+/* Structured data derived directly from the visible Q&As — no invented content. */
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base
+  title="Frequently asked questions"
+  description="Answers about Plenivostudio's offline planners: how offline works, where data is stored, licensing, refunds and support."
+  path="/faq"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
+      <p class="eyebrow" data-reveal="up">FAQ</p>
+      <h1 data-reveal="up">Frequently asked questions</h1>
+      <p class="lead" data-reveal="up">
+        Straight answers about how our offline planners work, where your data
+        lives, and what buying means. If something isn't covered here,
+        <a href="/contact"> ask us directly</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container" style="max-width: 800px;" data-reveal="up">
+      <FaqAccordion items={faqs} />
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container" style="max-width: 800px;">
+      <div class="card faq-cta" data-reveal="up">
+        <h2>Still have a question?</h2>
+        <p>
+          Tell us what's unclear and we'll answer — and if it's a good question,
+          we'll add it to this page so others benefit too.
+        </p>
+        <a class="btn btn-primary" href="/contact">Contact us</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lead {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--ink, #16181d);
+    max-width: 62ch;
+  }
+  .faq-cta {
+    padding: 2rem;
+  }
+  .faq-cta h2 {
+    margin-top: 0;
+  }
+  .faq-cta p {
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+</style>

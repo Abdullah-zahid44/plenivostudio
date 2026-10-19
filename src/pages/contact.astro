@@ -1,0 +1,231 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+
+const configured = site.contactEmail !== '';
+---
+
+<Base
+  title="Contact"
+  description="Contact Plenivostudio — questions about products, orders or support. We read every message."
+  path="/contact"
+>
+  <section class="section">
+    <div class="container" style="max-width: 720px;">
+      <p class="eyebrow" data-reveal="up">Contact</p>
+      <h1 data-reveal="up">Get in touch</h1>
+      <p class="lead muted" data-reveal="up">
+        Questions about a product, an order, or a bug? Send us a message — we
+        read every one.
+      </p>
+
+      {
+        configured ? (
+          <>
+            <div class="notice" role="note" data-reveal="up">
+              <p style="margin: 0;" class="small">
+                <strong>How this form works:</strong> submitting opens your own
+                email app with your message addressed to us. Nothing is sent
+                automatically and nothing is stored on this site. We reply from{' '}
+                <span>{site.contactEmail}</span> — never share payment details by
+                email.
+              </p>
+            </div>
+            <form id="contact-form" novalidate data-reveal="up">
+              <div class="form-field">
+                <label for="cf-name">Your name</label>
+                <input
+                  type="text"
+                  id="cf-name"
+                  name="name"
+                  autocomplete="name"
+                  required
+                  maxlength="120"
+                  aria-describedby="cf-name-error"
+                />
+                <p class="form-error" id="cf-name-error" hidden>
+                  Please enter your name.
+                </p>
+              </div>
+              <div class="form-field">
+                <label for="cf-email">Your email</label>
+                <input
+                  type="email"
+                  id="cf-email"
+                  name="email"
+                  autocomplete="email"
+                  required
+                  maxlength="254"
+                  aria-describedby="cf-email-error"
+                />
+                <p class="form-error" id="cf-email-error" hidden>
+                  Please enter a valid email address.
+                </p>
+              </div>
+              <div class="form-field">
+                <label for="cf-subject">Subject</label>
+                <input
+                  type="text"
+                  id="cf-subject"
+                  name="subject"
+                  required
+                  maxlength="140"
+                  placeholder="e.g. Question about the Life Planner"
+                  aria-describedby="cf-subject-error"
+                />
+                <p class="form-error" id="cf-subject-error" hidden>
+                  Please enter a subject.
+                </p>
+              </div>
+              <div class="form-field">
+                <label for="cf-message">Message</label>
+                <textarea
+                  id="cf-message"
+                  name="message"
+                  rows="6"
+                  required
+                  maxlength="5000"
+                  aria-describedby="cf-message-error"
+                />
+                <p class="form-error" id="cf-message-error" hidden>
+                  Please enter your message.
+                </p>
+              </div>
+              <button class="btn btn-primary" type="submit">
+                Open email app to send
+              </button>
+              <p class="small muted" style="margin-top: 1rem;">
+                This opens your email app — your message is only sent when you
+                press send there.
+              </p>
+            </form>
+            <script define:vars={{ contactEmail: site.contactEmail }}>
+              const form = document.getElementById('contact-form');
+              form?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const get = (id) => document.getElementById(id);
+                const name = get('cf-name');
+                const email = get('cf-email');
+                const subject = get('cf-subject');
+                const message = get('cf-message');
+                let ok = true;
+                const check = (input, errId, valid) => {
+                  const err = get(errId);
+                  if (!valid) {
+                    ok = false;
+                    if (err) err.hidden = false;
+                    input.setAttribute('aria-invalid', 'true');
+                  } else {
+                    if (err) err.hidden = true;
+                    input.removeAttribute('aria-invalid');
+                  }
+                };
+                check(name, 'cf-name-error', name.value.trim().length > 0);
+                check(
+                  email,
+                  'cf-email-error',
+                  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())
+                );
+                check(subject, 'cf-subject-error', subject.value.trim().length > 0);
+                check(message, 'cf-message-error', message.value.trim().length > 0);
+                if (!ok) {
+                  const firstInvalid = form.querySelector('[aria-invalid="true"]');
+                  if (firstInvalid) firstInvalid.focus();
+                  return;
+                }
+                const body = `Name: ${name.value.trim()}\nEmail: ${email.value.trim()}\n\n${message.value.trim()}`;
+                const href =
+                  'mailto:' +
+                  contactEmail +
+                  '?subject=' +
+                  encodeURIComponent('[Plenivostudio] ' + subject.value.trim()) +
+                  '&body=' +
+                  encodeURIComponent(body);
+                window.location.href = href;
+              });
+            </script>
+          </>
+        ) : (
+          <div class="notice warn" role="note" data-reveal="up">
+            <p>
+              <strong>Contact email not configured yet.</strong>
+            </p>
+            <p class="small" style="margin: 0;">
+              Our contact address is being set up and will appear here before
+              launch. Until then, there is no contact form on this page — we will
+              not pretend a message was sent. Please check back soon.
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lead {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+  .small {
+    font-size: 0.9rem;
+  }
+  .muted {
+    color: #55565e;
+  }
+  /* Local form styles so the page renders correctly regardless of the
+     global stylesheet build. */
+  .form-field {
+    margin-bottom: 1.25rem;
+  }
+  .form-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--ink, #16181d);
+  }
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    font-family: var(--font-ui, Inter, system-ui, sans-serif);
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--line, #e5e3dc);
+    border-radius: var(--radius, 12px);
+    background: #fff;
+    color: var(--ink, #16181d);
+  }
+  .form-field input:focus,
+  .form-field textarea:focus {
+    border-color: var(--indigo, #6554d9);
+    outline: 3px solid var(--lavender, #e9e6fb);
+    outline-offset: 1px;
+  }
+  .form-field [aria-invalid='true'] {
+    border-color: #a4262c;
+  }
+  .form-error {
+    color: #a4262c;
+    font-size: 0.9rem;
+    margin: 0.35rem 0 0;
+  }
+  .form-error[hidden] {
+    display: none;
+  }
+  .notice {
+    border: 1.5px solid var(--line, #e5e3dc);
+    border-left: 5px solid var(--indigo, #6554d9);
+    background: #f4f2fd;
+    border-radius: var(--radius, 12px);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    line-height: 1.7;
+  }
+  .notice.warn {
+    border-left-color: #b7791f;
+    background: #fdf6e8;
+  }
+  form {
+    margin-top: 1.5rem;
+  }
+</style>

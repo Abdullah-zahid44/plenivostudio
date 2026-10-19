@@ -1,0 +1,396 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import MiniPreview from '../components/MiniPreview.astro';
+import FeatureGrid from '../components/FeatureGrid.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import PlannerTour from '../components/PlannerTour.astro';
+import ScrollShowcase from '../components/ScrollShowcase.astro';
+import ProductCard from '../components/ProductCard.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import CompatibilityNote from '../components/CompatibilityNote.astro';
+import { products, formatPrice } from '../config/products';
+
+const product = products[0];
+const priceLabel = formatPrice(product.priceUSD);
+
+const icon = (path: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+
+const benefits = [
+  {
+    title: 'Works offline',
+    text: 'The planner is a single HTML file. After download, it runs entirely in your browser — no internet connection needed, ever.',
+    icon: icon(
+      '<line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 5-2.91"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/>'
+    ),
+  },
+  {
+    title: 'One-time purchase',
+    text: 'Pay once, own it. No subscriptions, no renewals, no feature paywalls added later.',
+    icon: icon(
+      '<path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1"/>'
+    ),
+  },
+  {
+    title: 'Your data stays yours',
+    text: 'Everything is stored locally in your own browser. No account, no cloud sync, no tracking inside the planner.',
+    icon: icon(
+      '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'
+    ),
+  },
+  {
+    title: 'Backup & restore',
+    text: 'Export your data to a JSON file any time, with validation and corruption checks. Import it back whenever you need.',
+    icon: icon(
+      '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>'
+    ),
+  },
+  {
+    title: 'No account required',
+    text: 'Nothing to sign up for, nothing to log in to. Download the file and start planning immediately.',
+    icon: icon(
+      '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="22" y2="13"/><line x1="22" y1="8" x2="17" y2="13"/>'
+    ),
+  },
+  {
+    title: 'Instant digital download',
+    text: 'After purchase, download the ZIP immediately. Extract it and open the planner in your browser — done in minutes.',
+    icon: icon(
+      '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>'
+    ),
+  },
+];
+
+const splits = [
+  {
+    eyebrow: 'Inside the planner',
+    heading: 'Every part of your week, one screen',
+    text: 'Seventeen views — dashboard, daily, weekly and monthly planners, tasks, habits, goals, budget, journal and notes — all in a single file that opens in your browser.',
+    points: [
+      'Tasks with priorities, categories, due dates and simple recurrence',
+      'Habit tracker with streaks and weekly statistics',
+      'Goals with milestones, budget with monthly totals, journal with search',
+    ],
+    img: '/screenshots/planner-tasks.png',
+    imgAlt:
+      'Tasks view of the Ultimate Offline Life Planner, showing tasks with priorities and due dates',
+  },
+  {
+    eyebrow: 'Private by design',
+    heading: 'Your data stays on your device',
+    text: 'The planner is one self-contained HTML file. Data is stored in your browser (IndexedDB with a localStorage fallback) — nothing is sent to us or to any cloud service.',
+    points: [
+      'Manual JSON backup with validation and corruption checks',
+      'CSV export for tasks, habits and budget',
+      'No account, no tracking inside the planner',
+    ],
+    img: '/screenshots/planner-budget.png',
+    imgAlt:
+      'Budget view of the Ultimate Offline Life Planner, showing income and expense entries with monthly totals',
+  },
+  {
+    eyebrow: 'Try it first',
+    heading: 'The free demo is the real planner',
+    text: 'The demo runs the actual planner with isolated sample data. Explore every section, add a task, check off a habit — then decide. Nothing you do in the demo affects any purchased copy.',
+    points: ['Every section explorable, no sign-up', 'Sample data is clearly separated'],
+    img: '/screenshots/planner-weekly.png',
+    imgAlt:
+      'Weekly view of the Ultimate Offline Life Planner, showing a seven-day task overview',
+  },
+];
+
+const steps = [
+  {
+    title: 'Choose your planner',
+    text: 'Pick the planner that fits how you work. Read the features, requirements and honest limitations first.',
+  },
+  {
+    title: 'Purchase when the store opens',
+    text: 'You pay once — there is no subscription. Purchasing is currently disabled until store activation, and the button says so plainly.',
+  },
+  {
+    title: 'Download the ZIP',
+    text: 'Your download is available right after purchase: the single-file planner plus README, quick-start guide, license and backup docs.',
+  },
+  {
+    title: 'Open it in your browser',
+    text: 'Extract the archive and open the planner file. No installation, no account — and it runs offline from there.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Do I need the internet to use the planner?',
+    a: 'No. After you download the ZIP, the planner runs entirely offline in your browser. An internet connection is only needed for the initial purchase and download.',
+  },
+  {
+    q: 'Is this a subscription?',
+    a: 'No. Every Plenivostudio product is a one-time purchase. You pay once and the file is yours to keep and use.',
+  },
+  {
+    q: 'Where is my data stored?',
+    a: 'In your own browser, on your own device — using IndexedDB with a localStorage fallback. Nothing is sent to us or to any cloud service. Because browser storage can be cleared, the planner includes a manual JSON export so you can keep your own backups.',
+  },
+];
+
+/**
+ * Product JSON-LD with real facts only. "availability" is deliberately
+ * omitted: checkout is not active yet, and we will not claim the product
+ * can be purchased right now.
+ */
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  description: product.tagline,
+  brand: { '@type': 'Brand', name: 'Plenivostudio' },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: product.currency,
+    price: product.priceUSD.toFixed(2),
+  },
+};
+---
+
+<Base
+  title="Offline digital planners — one-time purchase, no subscription"
+  description="Plenivostudio makes beautifully designed offline digital planning tools. Buy once, use forever. Your planning data stays on your device — no cloud, no subscription."
+  path="/"
+  productJsonLd={productJsonLd}
+>
+  <Hero />
+
+  <!-- Mini interactive preview: a live taste of the planner, right under the hero -->
+  <section class="section preview-band" aria-label="Interactive preview">
+    <div class="container">
+      <MiniPreview />
+    </div>
+  </section>
+
+  <!-- Trust strip: verifiable facts only -->
+  <section class="trust-band" aria-label="Key facts">
+    <div class="container">
+      <ul class="trust-list">
+        <li data-reveal="up">Single HTML file</li>
+        <li data-reveal="up" data-reveal-delay="90">Works offline</li>
+        <li data-reveal="up" data-reveal-delay="180">No account needed</li>
+        <li data-reveal="up" data-reveal-delay="270">One-time purchase · {priceLabel}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="benefits-heading">
+    <div class="container">
+      <p class="eyebrow" data-reveal="up">Why Plenivostudio</p>
+      <h2 id="benefits-heading" data-reveal="up">Planning software that respects you</h2>
+      <FeatureGrid items={benefits} />
+    </div>
+  </section>
+
+  {
+    splits.map((s, i) => (
+      <section class="section split" aria-labelledby={`split-${i}`}>
+        <div class="container split-grid">
+          <div class="split-copy" data-reveal={i % 2 === 0 ? 'right' : 'left'}>
+            <p class="eyebrow">{s.eyebrow}</p>
+            <h2 id={`split-${i}`}>{s.heading}</h2>
+            <p class="muted">{s.text}</p>
+            <ul>
+              {s.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+          <figure
+            class="split-visual"
+            data-reveal={i % 2 === 0 ? 'left' : 'right'}
+            data-tilt
+            data-tilt-max="5"
+          >
+            <img
+              src={s.img}
+              alt={s.imgAlt}
+              width="1200"
+              height="800"
+              loading="lazy"
+            />
+            <figcaption class="small muted">
+              Actual screenshot of the running planner
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section" aria-labelledby="tour-heading">
+    <div class="container">
+      <p class="eyebrow" data-reveal="up">Take the tour</p>
+      <h2 id="tour-heading" data-reveal="up">Six views, one file</h2>
+      <p class="muted" style="max-width: 40rem;" data-reveal="up">
+        A look at some of the planner's seventeen views — every screenshot is
+        the real product.
+      </p>
+      <div data-reveal="up">
+        <PlannerTour />
+      </div>
+    </div>
+  </section>
+
+  <ScrollShowcase />
+
+  <section class="section" aria-labelledby="how-heading">
+    <div class="container">
+      <p class="eyebrow" data-reveal="up">How it works</p>
+      <h2 id="how-heading" data-reveal="up">From purchase to planning in minutes</h2>
+      <HowItWorks steps={steps} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="featured-heading">
+    <div class="container">
+      <p class="eyebrow" data-reveal="up">Featured product</p>
+      <div data-reveal="up">
+        <ProductCard product={product} />
+      </div>
+      <div style="margin-top: 1.5rem;" data-reveal="up">
+        <CompatibilityNote compact />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="preview-heading">
+    <div class="container">
+      <div class="card cta-card" data-reveal="scale">
+        <p class="eyebrow">Interactive preview</p>
+        <h2 id="preview-heading">Try the real thing, free</h2>
+        <p class="muted" style="max-width: 40rem; margin: 0 auto 1.5rem;">
+          The demo is the actual planner running with sample data. Click around, add a
+          task, check off a habit — nothing you do affects any purchased copy.
+        </p>
+        <a class="btn btn-primary" href="/demo">Open the live demo</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="faq-heading">
+    <div class="container" style="max-width: 800px;">
+      <p class="eyebrow" data-reveal="up">Common questions</p>
+      <h2 id="faq-heading" data-reveal="up">Frequently asked questions</h2>
+      <div data-reveal="up">
+        <FaqAccordion items={faqs} />
+      </div>
+      <p style="margin-top: 1.5rem;">
+        <a href="/faq">See all questions</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ------------------------------------------------------------------
+   * FALLBACK STYLES — homepage-only layout.
+   * Uses design-system hooks when present (.container, .section, .eyebrow,
+   * .btn, .card, --paper/--ink/--lavender/--indigo/--line/--radius/
+   * --font-display). Additive if the rebuilt global.css covers these.
+   * ------------------------------------------------------------------ */
+  .trust-band {
+    background: var(--lavender, #e9e6fb);
+    border-top: 1px solid var(--line, #e5e3dc);
+    border-bottom: 1px solid var(--line, #e5e3dc);
+    padding: 1.25rem 0;
+  }
+  /* Mini preview sits right under the hero: tighten the band's padding. */
+  .preview-band {
+    padding-top: 0.5rem;
+  }
+  #tour-heading {
+    scroll-margin-top: 1rem;
+  }
+  .trust-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: center;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .trust-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+  .trust-list li::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--indigo, #6554d9);
+    flex: none;
+  }
+  .split + .split {
+    border-top: 1px solid var(--line, #e5e3dc);
+  }
+  .split-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .split-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    /* Alternate: even splits get copy first; odd splits mirror via order. */
+    .split:nth-of-type(odd) .split-copy {
+      order: 2;
+    }
+    .split:nth-of-type(odd) .split-visual {
+      order: 1;
+    }
+  }
+  .split-copy ul {
+    margin: 1.25rem 0 0;
+    padding-left: 1.25rem;
+  }
+  .split-copy li {
+    margin-bottom: 0.5rem;
+  }
+  .split-copy h2 {
+    font-size: clamp(1.625rem, 3vw, 2.25rem);
+    margin: 0.75rem 0 1rem;
+  }
+  .split-visual {
+    margin: 0;
+    perspective: 1000px;
+  }
+  .split-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--card, #fff);
+    border: 1px solid var(--line, #e5e3dc);
+    border-radius: var(--radius, 12px);
+    box-shadow: 0 20px 40px -24px rgba(22, 24, 29, 0.25);
+  }
+  .split-visual figcaption {
+    text-align: center;
+    margin-top: 0.875rem;
+  }
+  .cta-card {
+    text-align: center;
+    padding: clamp(2rem, 5vw, 3.5rem);
+  }
+  #faq-heading,
+  #featured-heading,
+  #how-heading,
+  #benefits-heading,
+  #preview-heading {
+    scroll-margin-top: 1rem;
+  }
+</style>
