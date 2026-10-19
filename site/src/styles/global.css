@@ -1,6 +1,11 @@
-/* Plenivostudio — global styles. Design tokens per ARCHITECTURE.md. */
+/* ============================================================
+   Plenivostudio — design system
+   Warm paper editorial. Tasteful CSS-3D motion, NO-AI-LOOK:
+   no color gradients, no glassmorphism, no neon glows.
+   ============================================================ */
 
 :root {
+  /* ---- Core palette (exact values per site config) ---- */
   --paper: #FAFAF8;
   --ink: #16181D;
   --ink-soft: #3A3E47;
@@ -13,14 +18,51 @@
   --gray: #F1F0EC;
   --line: #E5E3DC;
   --card: #FFFFFF;
+
+  /* ---- Extended paper tones ---- */
+  --paper-deep: #F2F1EB; /* slightly darker paper for alt sections */
+
+  /* ---- Radii ---- */
   --radius: 16px;
   --radius-lg: 20px;
+
+  /* ---- Shadows (all neutral ink-based, never neon) ---- */
   --shadow: 0 8px 28px rgba(22, 24, 29, 0.07);
   --shadow-lg: 0 18px 48px rgba(22, 24, 29, 0.1);
+  --shadow-3d: 0 30px 64px rgba(22, 24, 29, 0.16),
+    0 8px 20px rgba(22, 24, 29, 0.1); /* deep soft shadow for tilted cards */
+
+  /* ---- Typography ---- */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: Georgia, 'Source Serif Pro', 'Times New Roman', serif;
+
+  /* Type scale */
+  --text-display: clamp(2.75rem, 6.5vw, 4.25rem);
+  --text-h1: clamp(2.25rem, 5vw, 3.5rem);
+  --text-h2: clamp(1.6rem, 3.4vw, 2.25rem);
+  --text-h3: 1.25rem;
+  --text-lead: clamp(1.125rem, 1.6vw, 1.3rem);
+  --text-body: 1.0625rem;
+  --text-small: 0.9rem;
+  --text-caption: 0.8rem;
+
+  /* ---- Spacing rhythm ---- */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+
+  /* ---- Layout ---- */
   --max-w: 1180px;
+
+  /* ---- Focus ring: visible, indigo, accessible ---- */
+  --focus-ring: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
 }
+
+/* ============ Reset / base ============ */
 
 *,
 *::before,
@@ -34,12 +76,17 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
+  background-color: var(--paper);
+  /* Paper texture: extremely subtle dot grid (~3% ink dots), reads as
+     stationery fiber, not tech. Never a color gradient. */
+  background-image: radial-gradient(rgba(22, 24, 29, 0.05) 1px, transparent 1.3px);
+  background-size: 24px 24px;
   color: var(--ink);
   font-family: var(--font-ui);
-  font-size: 1.0625rem;
+  font-size: var(--text-body);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -51,16 +98,17 @@ h3 {
   letter-spacing: -0.01em;
   color: var(--ink);
   margin: 0 0 0.6em;
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-size: var(--text-h1);
 }
 h2 {
-  font-size: clamp(1.6rem, 3.4vw, 2.25rem);
+  font-size: var(--text-h2);
 }
 h3 {
-  font-size: 1.25rem;
+  font-size: var(--text-h3);
 }
 
 p {
@@ -82,11 +130,11 @@ img {
   display: block;
 }
 
-/* Visible, consistent keyboard focus */
+/* ---- Visible keyboard focus (indigo ring, meets WCAG contrast) ---- */
 :focus-visible {
-  outline: 3px solid var(--indigo);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 6px;
 }
 
 /* Skip link */
@@ -96,34 +144,48 @@ img {
   top: 0;
   background: var(--ink);
   color: #fff;
-  padding: 0.75rem 1.25rem;
+  padding: var(--space-sm) var(--space-lg);
   border-radius: 0 0 10px 0;
   z-index: 100;
   text-decoration: none;
 }
 .skip-link:focus {
   left: 0;
+  box-shadow: var(--focus-ring);
 }
 
-/* Layout */
+/* ============ Layout utilities ============ */
+
+.container,
 .wrap {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--space-lg);
+}
+@media (max-width: 640px) {
+  .container,
+  .wrap {
+    padding: 0 var(--space-md);
+  }
 }
 
 .section {
-  padding: 4.5rem 0;
+  padding: var(--space-3xl) 0;
 }
 .section-tight {
-  padding: 3rem 0;
+  padding: var(--space-xl) 0;
+}
+.section-alt {
+  background-color: var(--paper-deep);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 /* 12-column grid */
 .grid-12 {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-lg);
 }
 .col-12 { grid-column: span 12; }
 .col-6 { grid-column: span 6; }
@@ -139,12 +201,49 @@ img {
   }
 }
 
-/* Buttons */
+/* ============ Type utilities ============ */
+
+.eyebrow {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--indigo-deep);
+  margin-bottom: var(--space-sm);
+}
+
+.text-display {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.lead {
+  font-size: var(--text-lead);
+  color: var(--ink-soft);
+  max-width: 44rem;
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+.small,
+.text-small {
+  font-size: var(--text-small);
+}
+.text-caption {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+/* ============ Buttons (3D press effect, honest disabled state) ============ */
+
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-xs);
   font-family: var(--font-ui);
   font-weight: 600;
   font-size: 1rem;
@@ -153,81 +252,166 @@ img {
   border: 2px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   line-height: 1.2;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease,
+    border-color 0.15s ease, color 0.15s ease;
 }
+
 .btn-primary {
   background: var(--indigo);
   color: #fff;
+  /* 3D: the button's "edge" is the deep indigo base */
+  box-shadow: 0 4px 0 var(--indigo-ink);
 }
 .btn-primary:hover {
   background: var(--indigo-deep);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 0 var(--indigo-ink);
 }
+.btn-primary:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--indigo-ink);
+}
+
 .btn-secondary {
   background: var(--card);
   color: var(--ink);
   border-color: var(--line);
+  box-shadow: 0 4px 0 rgba(22, 24, 29, 0.14);
 }
 .btn-secondary:hover {
   border-color: var(--indigo);
   color: var(--indigo-deep);
   transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 0 rgba(22, 24, 29, 0.14);
 }
+.btn-secondary:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 rgba(22, 24, 29, 0.14);
+}
+
+.btn-sm {
+  font-size: var(--text-small);
+  padding: 0.6rem 1.15rem;
+}
+.btn-lg {
+  font-size: 1.1rem;
+  padding: 1.05rem 2.25rem;
+}
+
+/* Honest disabled state: looks inactive, behaves inactive. */
 .btn[disabled],
-.btn-disabled {
+.btn.is-disabled {
   background: var(--gray);
   color: var(--ink-muted);
+  border-color: var(--line);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-  border-color: var(--line);
+  text-decoration: none;
+}
+.btn[disabled]:hover,
+.btn.is-disabled:hover,
+.btn[disabled]:active,
+.btn.is-disabled:active {
+  transform: none;
+  box-shadow: none;
+  background: var(--gray);
+  color: var(--ink-muted);
+}
+/* aria-disabled anchor variant: non-interactive but stays in tab order */
+a.btn.is-disabled {
+  pointer-events: none;
 }
 
-/* Cards */
+/* ============ Cards ============ */
+
 .card {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  padding: 2rem;
+  padding: var(--space-xl);
 }
 .card h3 {
   margin-top: 0;
 }
 
-.eyebrow {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--indigo-deep);
-  margin-bottom: 0.75rem;
+/* ============ Motion hooks (JS-driven; pure-CSS fallbacks below) ============ */
+
+/* 3D tilt: JS writes transform inline. CSS only provides the stage. */
+[data-tilt] {
+  transition: transform 0.18s ease-out, box-shadow 0.25s ease-out;
+  will-change: transform;
+}
+[data-tilt]:hover {
+  box-shadow: var(--shadow-3d);
 }
 
-.lead {
-  font-size: 1.25rem;
-  color: var(--ink-soft);
-  max-width: 44rem;
+/* Scroll reveal: progressive enhancement — JS adds `js-motion` on <html>
+   before observing. Without JS, elements are simply visible. */
+html.js-motion [data-reveal] {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+html.js-motion [data-reveal='up'],
+html.js-motion [data-reveal]:not([data-reveal='left']):not([data-reveal='right']):not([data-reveal='scale']) {
+  transform: translateY(24px);
+}
+html.js-motion [data-reveal='left'] {
+  transform: translateX(24px);
+}
+html.js-motion [data-reveal='right'] {
+  transform: translateX(-24px);
+}
+html.js-motion [data-reveal='scale'] {
+  transform: scale(0.96);
+}
+html.js-motion [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
 }
 
-.muted {
-  color: var(--ink-muted);
+/* 3D paper-stack hover: layered sheets fan out behind the card (pure CSS).
+   Sheets are solid paper — no gradients, no translucency tricks. */
+[data-stack] {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 800px;
 }
-.small {
-  font-size: 0.9rem;
+[data-stack]::before,
+[data-stack]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--card);
+  border: 1px solid var(--line);
+  transform: translateZ(-10px);
+  transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: -1;
+}
+[data-stack]::after {
+  transform: translateZ(-20px);
+}
+[data-stack]:hover::before {
+  transform: translateZ(-10px) translateY(7px) rotate(-1.6deg);
+}
+[data-stack]:hover::after {
+  transform: translateZ(-20px) translateY(14px) rotate(1.4deg);
 }
 
-/* Announcement bar */
+/* ============ Announcement bar ============ */
+
 .announcement {
   background: var(--ink);
   color: #fff;
   text-align: center;
   font-size: 0.95rem;
-  padding: 0.65rem 1rem;
+  padding: 0.65rem var(--space-md);
 }
 .announcement p {
   margin: 0;
@@ -236,13 +420,13 @@ img {
   font-weight: 700;
 }
 
-/* Header */
+/* ============ Header (solid paper — no glassmorphism) ============ */
+
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(250, 250, 248, 0.92);
-  backdrop-filter: blur(10px);
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
 .header-inner {
@@ -291,7 +475,7 @@ img {
   display: none;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 1rem 1.5rem 1.5rem;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
   border-top: 1px solid var(--line);
   background: var(--paper);
 }
@@ -317,14 +501,15 @@ img {
   }
 }
 
-/* Hero */
+/* ============ Hero ============ */
+
 .hero {
-  padding: 5rem 0 4rem;
+  padding: var(--space-3xl) 0 var(--space-2xl);
 }
 .hero-grid {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  gap: 3rem;
+  gap: var(--space-2xl);
   align-items: center;
 }
 @media (max-width: 900px) {
@@ -334,7 +519,7 @@ img {
 }
 .hero-ctas {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-md);
   flex-wrap: wrap;
   margin-top: 1.75rem;
 }
@@ -347,17 +532,18 @@ img {
   border: 1px solid var(--line);
 }
 .hero-figure figcaption {
-  font-size: 0.9rem;
+  font-size: var(--text-small);
   color: var(--ink-muted);
-  margin-top: 0.75rem;
+  margin-top: var(--space-sm);
   text-align: center;
 }
 
-/* Feature grid */
+/* ============ Feature grid ============ */
+
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-lg);
 }
 @media (max-width: 900px) {
   .feature-grid {
@@ -384,7 +570,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 .feature-icon svg {
   width: 1.5rem;
@@ -392,12 +578,13 @@ img {
   stroke: var(--indigo-deep);
 }
 
-/* Steps */
+/* ============ Steps ============ */
+
 .steps {
   counter-reset: step;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-lg);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -426,15 +613,16 @@ img {
   background: var(--indigo);
   color: #fff;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 
-/* FAQ accordion */
+/* ============ FAQ accordion ============ */
+
 .faq-item {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--card);
-  margin-bottom: 0.9rem;
+  margin-bottom: var(--space-sm);
   overflow: hidden;
 }
 .faq-question {
@@ -442,10 +630,10 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-md);
   background: none;
   border: none;
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem var(--space-lg);
   font-family: var(--font-ui);
   font-size: 1.05rem;
   font-weight: 600;
@@ -463,30 +651,34 @@ img {
   color: var(--indigo-deep);
 }
 .faq-answer {
-  padding: 0 1.5rem 1.5rem;
+  padding: 0 var(--space-lg) var(--space-lg);
   color: var(--ink-soft);
 }
 .faq-answer[hidden] {
   display: none;
 }
 
-/* Product card */
+/* ============ Product card ============ */
+
 .product-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
+  gap: var(--space-xl);
   align-items: center;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  padding: 2.5rem;
+  padding: var(--space-xl);
 }
 @media (max-width: 900px) {
   .product-card {
     grid-template-columns: 1fr;
     padding: 1.75rem;
   }
+}
+.product-entry {
+  margin-bottom: var(--space-2xl);
 }
 .price {
   font-family: var(--font-display);
@@ -499,7 +691,8 @@ img {
   color: var(--ink-muted);
 }
 
-/* Forms */
+/* ============ Forms ============ */
+
 .form-field {
   margin-bottom: 1.25rem;
 }
@@ -522,12 +715,12 @@ img {
 .form-field input:focus,
 .form-field textarea:focus {
   border-color: var(--indigo);
-  outline: 3px solid var(--lavender);
-  outline-offset: 1px;
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 .form-error {
   color: #a4262c;
-  font-size: 0.9rem;
+  font-size: var(--text-small);
   margin-top: 0.35rem;
 }
 .notice {
@@ -535,25 +728,26 @@ img {
   border-left: 5px solid var(--indigo);
   background: var(--lavender-soft);
   border-radius: 12px;
-  padding: 1.25rem 1.5rem;
-  margin: 1.5rem 0;
+  padding: 1.25rem var(--space-lg);
+  margin: var(--space-lg) 0;
 }
 .notice.warn {
   border-left-color: #b7791f;
   background: #fdf6e8;
 }
 
-/* Footer */
+/* ============ Footer ============ */
+
 .site-footer {
   border-top: 1px solid var(--line);
   background: var(--card);
-  margin-top: 4rem;
-  padding: 3.5rem 0 2rem;
+  margin-top: var(--space-2xl);
+  padding: 3.5rem 0 var(--space-xl);
 }
 .footer-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 2rem;
+  gap: var(--space-xl);
 }
 @media (max-width: 900px) {
   .footer-grid {
@@ -567,7 +761,7 @@ img {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-muted);
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 .footer-grid ul {
   list-style: none;
@@ -586,18 +780,19 @@ img {
   text-decoration: underline;
 }
 .footer-bottom {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
   border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.9rem;
+  gap: var(--space-md);
+  font-size: var(--text-small);
   color: var(--ink-muted);
 }
 
-/* Demo frame */
+/* ============ Demo frame ============ */
+
 .demo-frame {
   width: 100%;
   height: min(78vh, 860px);
@@ -607,9 +802,10 @@ img {
   background: #fff;
 }
 
-/* Legal pages */
+/* ============ Legal pages ============ */
+
 .legal h2 {
-  margin-top: 2.5rem;
+  margin-top: var(--space-xl);
 }
 .legal ul {
   padding-left: 1.4rem;
@@ -618,12 +814,13 @@ img {
   border: 1.5px dashed #b7791f;
   background: #fdf6e8;
   border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 2rem;
+  padding: var(--space-md) 1.25rem;
+  margin-bottom: var(--space-xl);
   font-size: 0.95rem;
 }
 
-/* Search */
+/* ============ Search ============ */
+
 .search-input {
   width: 100%;
   max-width: 34rem;
@@ -634,8 +831,115 @@ img {
   border-radius: 999px;
   background: #fff;
 }
+.faq-list {
+  margin-top: var(--space-lg);
+}
 
-/* Reduced motion */
+/* ============ Dark mode ============
+   Same brand at night: warm charcoal paper (#1b1a17 / #26241f), warm light
+   ink (#f2efe6), indigo kept recognizable but softened, lavender becomes a
+   deep muted indigo-tint surface. Warm, never blue-black. No gradients,
+   no glassmorphism, no neon — the no-AI-look rules still apply.
+   Wired via [data-theme="dark"] on <html>; the toggle attribute +
+   localStorage + no-flash head script are handled separately. Every color
+   on the site resolves through the tokens above, so this single block
+   (equal specificity to :root, later in source) flips the whole theme. */
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --paper: #1b1a17;
+  --ink: #f2efe6;
+  --ink-soft: #d8d3c5;
+  --ink-muted: #a39c8c;
+  --indigo: #7b6ae6; /* recognizable indigo, softened for dark backgrounds */
+  --indigo-deep: #b3a8f2; /* light enough to read as text/links on dark */
+  --indigo-ink: #4e3fb8; /* 3D button edge stays deep */
+  --lavender: #35314e; /* deep muted indigo-tint surface */
+  --lavender-soft: #272430;
+  --gray: #2a2823;
+  --line: #3a372d;
+  --card: #26241f;
+  --paper-deep: #211f1a;
+
+  /* Shadows go darker and deeper; still neutral, never colored/neon */
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.45);
+  --shadow-3d: 0 30px 64px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.4);
+
+  --focus-ring: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+
+/* Paper texture, night version: faint warm-light dots, same stationery feel */
+[data-theme='dark'] body {
+  background-image: radial-gradient(rgba(242, 239, 230, 0.055) 1px, transparent 1.3px);
+}
+
+/* Elements that hardcode light-mode values get dark-safe overrides */
+[data-theme='dark'] .form-field input,
+[data-theme='dark'] .form-field textarea,
+[data-theme='dark'] .search-input,
+[data-theme='dark'] .demo-frame {
+  background: var(--card);
+}
+[data-theme='dark'] .notice.warn,
+[data-theme='dark'] .draft-banner {
+  background: #2c2718;
+  border-color: #8a6a2f;
+  color: var(--ink);
+}
+[data-theme='dark'] .form-error {
+  color: #e5a3a3;
+}
+[data-theme='dark'] .announcement {
+  background: var(--lavender);
+  color: var(--ink);
+}
+[data-theme='dark'] .skip-link {
+  background: var(--ink);
+  color: #1b1a17;
+}
+
+/* ============ Theme toggle (icon button; wiring handled separately) ============
+   Usage: <button class="theme-toggle" aria-label="Switch to dark mode"></button>
+   The glyph shows the mode you will switch TO: ◑ (moon) in light mode,
+   ◐ (sun) in dark mode. Text glyphs only — no emoji, no external icons. */
+
+.theme-toggle {
+  appearance: none;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.theme-toggle::before {
+  content: '◑';
+}
+[data-theme='dark'] .theme-toggle::before {
+  content: '◐';
+}
+.theme-toggle:hover {
+  border-color: var(--indigo);
+  color: var(--indigo-deep);
+  transform: translateY(-1px);
+}
+.theme-toggle:active {
+  transform: translateY(0);
+}
+
+/* ============ Reduced motion: disable ALL motion ============ */
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -645,5 +949,15 @@ img {
   *::after {
     transition: none !important;
     animation: none !important;
+  }
+  /* Reveal elements must never stay hidden */
+  html.js-motion [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  /* Flatten paper stacks */
+  [data-stack]::before,
+  [data-stack]::after {
+    transform: none;
   }
 }
