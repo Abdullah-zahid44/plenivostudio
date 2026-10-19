@@ -49,9 +49,20 @@ const faqs = [
   },
   {
     q: 'How do I contact support?',
-    a: 'Use the Contact page. Until our contact email is configured, the page will say so plainly rather than pretending to send your message.',
+    a: 'Use the Contact page — the form opens your email app with your message addressed to us. There is no automated ticketing system; every message is read by a person.',
   },
 ];
+
+/* Structured data derived directly from the visible Q&As — no invented content. */
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 ---
 
 <Base
@@ -59,11 +70,55 @@ const faqs = [
   description="Answers about Plenivostudio's offline planners: how offline works, where data is stored, licensing, refunds and support."
   path="/faq"
 >
-  <section class="section-tight">
-    <div class="wrap" style="max-width: 800px;">
-      <p class="eyebrow">FAQ</p>
-      <h1>Frequently asked questions</h1>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
+      <p class="eyebrow" data-reveal="up">FAQ</p>
+      <h1 data-reveal="up">Frequently asked questions</h1>
+      <p class="lead" data-reveal="up">
+        Straight answers about how our offline planners work, where your data
+        lives, and what buying means. If something isn't covered here,
+        <a href="/contact"> ask us directly</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container" style="max-width: 800px;" data-reveal="up">
       <FaqAccordion items={faqs} />
     </div>
   </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container" style="max-width: 800px;">
+      <div class="card faq-cta" data-reveal="up">
+        <h2>Still have a question?</h2>
+        <p>
+          Tell us what's unclear and we'll answer — and if it's a good question,
+          we'll add it to this page so others benefit too.
+        </p>
+        <a class="btn btn-primary" href="/contact">Contact us</a>
+      </div>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .lead {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--ink, #16181d);
+    max-width: 62ch;
+  }
+  .faq-cta {
+    padding: 2rem;
+  }
+  .faq-cta h2 {
+    margin-top: 0;
+  }
+  .faq-cta p {
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+</style>

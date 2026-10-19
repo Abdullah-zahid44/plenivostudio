@@ -23,13 +23,119 @@ const legalLinks = [
 ];
 ---
 
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line, #e5e3dc);
+    background: var(--paper, #fafaf8);
+    margin-top: 4rem;
+  }
+  .footer-inner {
+    width: min(1200px, 100% - 2.5rem);
+    margin-inline: auto;
+    padding: 3rem 0 2rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 720px) {
+    .footer-grid {
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+    }
+  }
+  .footer-brand-name {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.6rem;
+    color: var(--ink, #16181d);
+  }
+  .footer-brand-name .brand-dot {
+    color: var(--indigo, #6554d9);
+  }
+  .footer-tagline {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink-muted, #6b6f78);
+    margin: 0 0 0.75rem;
+    max-width: 26ch;
+  }
+  .footer-contact {
+    font-size: 0.92rem;
+    color: var(--ink-muted, #6b6f78);
+    margin: 0;
+  }
+  .footer-contact a {
+    color: var(--indigo-ink, #3d3191);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .footer-contact a:hover {
+    border-bottom-color: var(--indigo, #6554d9);
+  }
+  .footer-nav h2 {
+    font-family: var(--font-ui, 'Inter', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft, #3a3e47);
+    margin: 0 0 0.9rem;
+  }
+  .footer-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .footer-nav a {
+    color: var(--ink-muted, #6b6f78);
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .footer-nav a:hover {
+    color: var(--indigo-ink, #3d3191);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .footer-nav a:focus-visible,
+  .footer-contact a:focus-visible {
+    outline: 2px solid var(--indigo, #6554d9);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .footer-bottom {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line, #e5e3dc);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--ink-muted, #6b6f78);
+  }
+  @media (min-width: 720px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+</style>
+
 <footer class="site-footer">
-  <div class="wrap">
+  <div class="footer-inner">
     <div class="footer-grid">
       <div>
-        <h2>{site.brandName}</h2>
-        <p class="small muted">{site.tagline}</p>
-        <p class="small muted">
+        <p class="footer-brand-name" aria-label={site.brandName}>
+          {site.brandName}<span class="brand-dot" aria-hidden="true">.</span>
+        </p>
+        <p class="footer-tagline">{site.tagline}</p>
+        <p class="footer-contact">
           {
             site.contactEmail ? (
               <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
@@ -39,7 +145,7 @@ const legalLinks = [
           }
         </p>
       </div>
-      <nav aria-label="Shop">
+      <nav class="footer-nav" aria-label="Shop">
         <h2>Shop</h2>
         <ul>
           {
@@ -51,7 +157,7 @@ const legalLinks = [
           }
         </ul>
       </nav>
-      <nav aria-label="Company">
+      <nav class="footer-nav" aria-label="Company">
         <h2>Company</h2>
         <ul>
           {
@@ -63,7 +169,7 @@ const legalLinks = [
           }
         </ul>
       </nav>
-      <nav aria-label="Legal">
+      <nav class="footer-nav" aria-label="Legal">
         <h2>Legal</h2>
         <ul>
           {
