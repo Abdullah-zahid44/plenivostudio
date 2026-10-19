@@ -21,7 +21,7 @@ export const site = {
   canonicalUrl:
     typeof process !== 'undefined' && process.env.SITE_URL
       ? process.env.SITE_URL
-      : 'https://plenivostudio.pages.dev',
+      : 'https://plenivostudio.vercel.app',
   /**
    * CONFIG ITEM — owner must supply a verified contact email before launch.
    * Until set, the contact page shows a "not configured" notice.
