@@ -1,0 +1,92 @@
+---
+import { formatPrice, type Product } from '../config/products';
+import CheckoutButton from './CheckoutButton.astro';
+import ScreenshotFigure from './ScreenshotFigure.astro';
+
+/**
+ * Featured product card: price always from config, honest caveats included.
+ * Screenshot uses the 3D treatment (tilt + paper stack) via motion hooks.
+ */
+interface Props {
+  product: Product;
+}
+const { product } = Astro.props;
+---
+
+<article class="product-card" aria-labelledby={`product-${product.id}`}>
+  <div class="product-card__media">
+    <ScreenshotFigure
+      src="/screenshots/planner-dashboard.png"
+      alt={`${product.name} — dashboard view showing today's date, priorities, tasks and habit progress`}
+      caption="Dashboard — your day at a glance"
+      tilt
+      tiltMax={7}
+      stack
+      width={1500}
+      height={1000}
+    />
+  </div>
+  <div class="product-card__body">
+    <p class="eyebrow">Featured product</p>
+    <h3 id={`product-${product.id}`} class="product-card__title">{product.name}</h3>
+    <p class="muted">{product.tagline}</p>
+    <p class="product-card__price">
+      <span class="price">{formatPrice(product.priceUSD)}</span>
+      <span class="price-note"> one-time purchase · version {product.version}</span>
+    </p>
+    <ul class="product-card__features">
+      {product.features.slice(0, 5).map((f) => <li>{f}</li>)}
+    </ul>
+    <div class="product-card__ctas">
+      <CheckoutButton product={product} />
+      <a class="btn btn-secondary" href={`/products/${product.slug}`}>View details</a>
+      <a class="btn btn-secondary" href={product.demoPath}>Try free demo</a>
+    </div>
+    <p class="small muted" style="margin: 1.25rem 0 0;">
+      Works offline in a modern browser. Your data stays on your device.
+    </p>
+  </div>
+</article>
+
+<style>
+  .product-card__media {
+    min-width: 0;
+  }
+  .product-card__title {
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    margin-bottom: 0.5rem;
+  }
+  .product-card__price {
+    margin: 1rem 0 1.25rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .product-card__features {
+    margin: 0 0 0.5rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .product-card__features li {
+    position: relative;
+    padding-left: 1.75rem;
+    color: var(--ink-soft);
+  }
+  .product-card__features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--indigo-deep);
+    font-weight: 700;
+  }
+  .product-card__ctas {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-top: 1.5rem;
+  }
+</style>

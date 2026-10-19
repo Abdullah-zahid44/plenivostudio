@@ -1,0 +1,143 @@
+---
+/**
+ * ScrollShowcase — tasteful scrollytelling section.
+ *
+ * A tall section with a sticky planner mockup (REAL screenshot) that rotates
+ * subtly as the user scrolls, using the shared `data-scrub` contract from
+ * public/scripts/motion.js (IntersectionObserver + rAF maps section scroll
+ * progress to rotateY(-14deg) → rotateY(14deg) + translateY; disabled under
+ * prefers-reduced-motion and on touch devices).
+ */
+---
+
+<section
+  class="section showcase"
+  data-scrub-section
+  aria-labelledby="showcase-heading"
+>
+  <div class="container">
+    <p class="eyebrow" data-reveal="up">See it move</p>
+    <h2 id="showcase-heading" data-reveal="up">One file, every view</h2>
+    <p class="muted showcase-lede" data-reveal="up">
+      Scroll and the planner turns — a single self-contained file holding all
+      seventeen views.
+    </p>
+  </div>
+
+  <div class="container showcase-track">
+    <div class="showcase-sticky">
+      <figure class="showcase-figure" data-scrub>
+        <img
+          src="/screenshots/planner-dashboard.png"
+          alt="Today dashboard of the Ultimate Offline Life Planner, showing priorities, tasks and habit progress"
+          width="1200"
+          height="800"
+          loading="lazy"
+        />
+        <figcaption class="small muted">
+          Actual screenshot of the running planner
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="showcase-steps">
+      <div class="showcase-step" data-reveal="up">
+        <h3>Everything in one file</h3>
+        <p class="muted">
+          The planner is a single HTML file. No installation, no account, no
+          cloud to sign into.
+        </p>
+      </div>
+      <div class="showcase-step" data-reveal="up">
+        <h3>Works where you are</h3>
+        <p class="muted">
+          After download it runs entirely offline in your browser — on desktop,
+          tablet or phone.
+        </p>
+      </div>
+      <div class="showcase-step" data-reveal="up">
+        <h3>Keep it forever</h3>
+        <p class="muted">
+          One-time purchase, and your data stays on your device. Back it up
+          with the built-in JSON export.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .showcase-lede {
+    max-width: 40rem;
+  }
+  .showcase-track {
+    position: relative;
+    margin-top: 2rem;
+  }
+  .showcase-figure {
+    margin: 0;
+    will-change: transform;
+  }
+  .showcase-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--card, #fff);
+    border: 1px solid var(--line, #e5e3dc);
+    border-radius: var(--radius, 12px);
+    box-shadow: 0 28px 56px -28px rgba(22, 24, 29, 0.3);
+  }
+  .showcase-figure figcaption {
+    text-align: center;
+    margin-top: 0.875rem;
+  }
+  .showcase-steps {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .showcase-step {
+    background: var(--card, #fff);
+    border: 1px solid var(--line, #e5e3dc);
+    border-radius: var(--radius, 12px);
+    padding: 1.5rem;
+  }
+  .showcase-step h3 {
+    font-size: 1.125rem;
+    margin: 0 0 0.5rem;
+  }
+  .showcase-step p {
+    margin: 0;
+  }
+
+  @media (min-width: 60rem) {
+    .showcase-track {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      /* Tall enough for the scroll-driven rotation to read clearly. */
+      min-height: 190vh;
+    }
+    .showcase-sticky {
+      position: sticky;
+      top: 12vh;
+    }
+    .showcase-steps {
+      gap: 0;
+      margin-top: 0;
+    }
+    .showcase-step {
+      min-height: 58vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: none;
+      border: none;
+      padding: 2rem 1rem;
+    }
+    .showcase-step h3 {
+      font-size: 1.375rem;
+    }
+  }
+</style>

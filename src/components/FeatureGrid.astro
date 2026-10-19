@@ -1,0 +1,68 @@
+---
+/** Grid of benefit cards. Icons are inline SVG (no emoji, no stock art). */
+interface Benefit {
+  title: string;
+  text: string;
+  icon: string;
+}
+interface Props {
+  items: Benefit[];
+}
+const { items } = Astro.props;
+---
+
+<div class="feature-grid">
+  {
+    items.map((b, i) => (
+      <article
+        class="feature-card card"
+        data-reveal="up"
+        data-reveal-delay={String((i % 3) * 90)}
+      >
+        <div class="feature-icon" aria-hidden="true">
+          <Fragment set:html={b.icon} />
+        </div>
+        <h3>{b.title}</h3>
+        <p class="muted" style="margin: 0;">
+          {b.text}
+        </p>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  /* ------------------------------------------------------------------
+   * FALLBACK STYLES — feature grid only.
+   * Uses design-system hooks when present (.card, --line, --font-ui,
+   * --ink, --radius). If the rebuilt global.css already covers
+   * .feature-grid / .feature-card, these rules are additive at worst.
+   * ------------------------------------------------------------------ */
+  .feature-grid {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  @media (min-width: 40rem) {
+    .feature-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .feature-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .feature-card {
+    padding: 1.5rem;
+  }
+  .feature-card h3 {
+    font-size: 1.0625rem;
+    margin: 0.875rem 0 0.5rem;
+  }
+  .feature-icon svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    stroke: var(--ink, #16181d);
+  }
+</style>

@@ -1,0 +1,32 @@
+---
+/** Truthful announcement strip — no fake offers, no countdowns. */
+interface Props {
+  text?: string;
+}
+const { text = 'One-time purchase. No subscriptions. Works offline.' } = Astro.props;
+---
+
+<style>
+  .announcement {
+    background: var(--lavender, #e9e6fb);
+    border-bottom: 1px solid var(--line, #e5e3dc);
+    color: var(--ink-soft, #3a3e47);
+  }
+  .announcement p {
+    width: min(1200px, 100% - 2.5rem);
+    margin: 0 auto;
+    padding: 0.55rem 0;
+    text-align: center;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .announcement strong {
+    font-family: var(--font-display, Georgia, serif);
+    font-weight: 700;
+    color: var(--ink, #16181d);
+  }
+</style>
+
+<div class="announcement" role="note">
+  <p><strong>{'Plenivostudio'}</strong> &mdash; {text}</p>
+</div>

@@ -1,0 +1,161 @@
+---
+/**
+ * Accessible FAQ accordion.
+ *
+ * - Real <button> triggers: keyboard-operable by default, announced by
+ *   screen readers.
+ * - aria-expanded on the button, aria-controls pointing at the answer,
+ *   answers exposed as role="region" labelled by their button.
+ * - ArrowUp / ArrowDown / Home / End move focus between questions;
+ *   Escape collapses the open item.
+ * - Styles are component-scoped so the accordion renders correctly no
+ *   matter what the global stylesheet provides.
+ */
+interface Faq {
+  q: string;
+  a: string;
+}
+interface Props {
+  items: Faq[];
+  headingLevel?: 'h2' | 'h3';
+}
+const { items, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+/* Build-time unique prefix so several accordions can share one page. */
+const uid = 'faq-' + Math.random().toString(36).slice(2, 9);
+---
+
+<div class="faq-list" id={uid}>
+  {
+    items.map((item, i) => (
+      <div class="faq-item">
+        <Heading class="faq-heading">
+          <button
+            class="faq-question"
+            type="button"
+            aria-expanded="false"
+            aria-controls={`${uid}-a-${i}`}
+            id={`${uid}-q-${i}`}
+          >
+            <span>{item.q}</span>
+            <span class="faq-icon" aria-hidden="true">
+              +
+            </span>
+          </button>
+        </Heading>
+        <div
+          class="faq-answer"
+          id={`${uid}-a-${i}`}
+          role="region"
+          aria-labelledby={`${uid}-q-${i}`}
+          hidden
+        >
+          <p>{item.a}</p>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .faq-list {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+  }
+  .faq-item {
+    border: 1px solid var(--line, #e5e3dc);
+    border-radius: var(--radius, 12px);
+    background: var(--card, #fff);
+    overflow: hidden;
+  }
+  .faq-heading {
+    margin: 0;
+  }
+  .faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: none;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-ui, Inter, system-ui, sans-serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--ink, #16181d);
+    cursor: pointer;
+    text-align: left;
+  }
+  .faq-question:hover {
+    color: var(--indigo, #6554d9);
+  }
+  .faq-question:focus-visible {
+    outline: 3px solid var(--lavender, #e9e6fb);
+    outline-offset: -3px;
+  }
+  .faq-icon {
+    flex: none;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--indigo, #6554d9);
+    transition: transform 0.2s ease;
+  }
+  .faq-question[aria-expanded='true'] .faq-icon {
+    transform: rotate(45deg);
+  }
+  .faq-answer {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--ink, #16181d);
+  }
+  .faq-answer[hidden] {
+    display: none;
+  }
+  .faq-answer p {
+    margin: 0;
+    line-height: 1.7;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-icon {
+      transition: none;
+    }
+  }
+</style>
+
+<script define:vars={{ uid }}>
+  const root = document.getElementById(uid);
+  if (root) {
+    const buttons = Array.from(root.querySelectorAll('.faq-question'));
+    const setExpanded = (btn, expanded) => {
+      btn.setAttribute('aria-expanded', String(expanded));
+      const answer = document.getElementById(btn.getAttribute('aria-controls') || '');
+      if (answer) answer.hidden = !expanded;
+    };
+    buttons.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        setExpanded(btn, btn.getAttribute('aria-expanded') !== 'true');
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          buttons[(i + 1) % buttons.length].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          buttons[(i - 1 + buttons.length) % buttons.length].focus();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          buttons[0].focus();
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          buttons[buttons.length - 1].focus();
+        } else if (e.key === 'Escape') {
+          setExpanded(btn, false);
+        }
+      });
+    });
+  }
+</script>

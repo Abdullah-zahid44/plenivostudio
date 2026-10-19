@@ -1,0 +1,69 @@
+---
+import { checkout } from '../config/checkout';
+import type { Product } from '../config/products';
+import { nextUniqueId } from './unique-id';
+
+/**
+ * Purchase button with honest states.
+ * - When checkout is disabled: a disabled button explaining that purchasing
+ *   opens after store activation. It never pretends to complete a purchase.
+ * - When enabled: a real link to the hosted checkout URL of the configured
+ *   payment provider (provider-agnostic copy; no provider is ever named).
+ *
+ * Class hooks kept stable for styling: btn / btn-primary / btn-secondary /
+ * btn-disabled / is-disabled.
+ */
+interface Props {
+  product: Product;
+}
+const { product } = Astro.props;
+
+const variantUrl = checkout.variants[product.checkoutVariantKey];
+const ready = checkout.enabled && variantUrl !== '';
+const noteId = nextUniqueId('checkout-note');
+---
+
+{
+  ready ? (
+    <div class="checkout">
+      <a class="btn btn-primary" href={variantUrl}>
+        Buy now — one-time purchase
+      </a>
+      <p class="small muted checkout-note">
+        Secure checkout. You will be redirected to complete your purchase.
+      </p>
+    </div>
+  ) : (
+    <div class="checkout">
+      <button
+        class="btn btn-disabled is-disabled"
+        type="button"
+        disabled
+        aria-describedby={noteId}
+      >
+        Purchasing opens after store activation
+      </button>
+      <p class="small muted checkout-note" id={noteId}>
+        Checkout is not active yet — our payment processor setup is still in
+        progress. This button will become a working purchase link once the
+        store is activated. No payment can be taken in this state.
+      </p>
+    </div>
+  )
+}
+
+<style>
+  .checkout {
+    display: inline-block;
+    max-width: 26rem;
+  }
+  .checkout .btn {
+    width: 100%;
+  }
+  .checkout-note {
+    margin: 0.75rem 0 0;
+  }
+  .checkout .btn-disabled {
+    border-style: dashed;
+  }
+</style>
