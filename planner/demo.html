@@ -805,6 +805,15 @@
       .mobile-menu-btn { display: flex; }
       .content-container { padding: 16px; }
     }
+    /* ===== Demo banner: pushes the app down, never overlaps it ===== */
+    #demoBanner { line-height: 1.45; }
+    body.demo-mode aside { top: var(--demoH, 44px); height: calc(100vh - var(--demoH, 44px)); }
+    body.demo-mode .main-wrapper { padding-top: var(--demoH, 44px); }
+    body.demo-mode header.top-bar { top: var(--demoH, 44px); }
+    @media(max-width: 760px) {
+      #demoBanner { font-size: 12.5px; padding: 9px 12px; }
+      body.demo-mode .quick-actions .top-action-btn { padding: 6px 8px; font-size: 12px; }
+    }
   </style>
   <style>
 /* ===== Plenivostudio extensions ===== */
@@ -1548,7 +1557,13 @@ async function boot() {
   initApp();
   if (DEMO_MODE) {
     const b = document.getElementById('demoBanner');
-    if (b) b.style.display = 'flex';
+    if (b) {
+      b.style.display = 'block';
+      document.body.classList.add('demo-mode');
+      const setBannerH = () => document.documentElement.style.setProperty('--demoH', b.offsetHeight + 'px');
+      setBannerH();
+      window.addEventListener('resize', setBannerH);
+    }
   } else if (!state.onboarded) {
     startOnboarding();
   }
