@@ -168,14 +168,20 @@ const productJsonLd = {
     </div>
   </section>
 
-  <!-- Trust strip: verifiable facts only -->
+  <!-- Trust strip: verifiable facts only — marquee, pauses on hover -->
   <section class="trust-band" aria-label="Key facts">
-    <div class="container">
+    <div class="trust-marquee">
       <ul class="trust-list">
-        <li data-reveal="up">Single HTML file</li>
-        <li data-reveal="up" data-reveal-delay="90">Works offline</li>
-        <li data-reveal="up" data-reveal-delay="180">No account needed</li>
-        <li data-reveal="up" data-reveal-delay="270">One-time purchase · {priceLabel}</li>
+        <li>Single HTML file</li>
+        <li>Works offline</li>
+        <li>No account needed</li>
+        <li>One-time purchase · {priceLabel}</li>
+      </ul>
+      <ul class="trust-list" aria-hidden="true">
+        <li>Single HTML file</li>
+        <li>Works offline</li>
+        <li>No account needed</li>
+        <li>One-time purchase · {priceLabel}</li>
       </ul>
     </div>
   </section>
@@ -300,6 +306,32 @@ const productJsonLd = {
     border-top: 1px solid var(--line, #e5e3dc);
     border-bottom: 1px solid var(--line, #e5e3dc);
     padding: 1.25rem 0;
+    overflow: hidden;
+  }
+  /* Marquee: the track holds two identical lists; translating -50% loops seamlessly. */
+  .trust-marquee {
+    display: flex;
+    width: max-content;
+    animation: trust-scroll 24s linear infinite;
+  }
+  .trust-band:hover .trust-marquee,
+  .trust-band:focus-within .trust-marquee {
+    animation-play-state: paused;
+  }
+  @keyframes trust-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trust-marquee {
+      animation: none;
+      width: auto;
+      display: block;
+    }
+    .trust-marquee .trust-list[aria-hidden='true'] {
+      display: none;
+    }
   }
   /* Mini preview sits right under the hero: tighten the band's padding. */
   .preview-band {
@@ -311,14 +343,12 @@ const productJsonLd = {
   .trust-list {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 1.25rem 0 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    justify-content: center;
-    text-align: center;
+    gap: 0 2.5rem;
     font-weight: 600;
     font-size: 0.9375rem;
+    flex: none;
   }
   .trust-list li {
     display: flex;
