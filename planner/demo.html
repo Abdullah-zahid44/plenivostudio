@@ -291,6 +291,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      min-width: 0;
       transition: margin-left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -813,6 +814,18 @@
     @media(max-width: 760px) {
       #demoBanner { font-size: 12.5px; padding: 9px 12px; }
       body.demo-mode .quick-actions .top-action-btn { padding: 6px 8px; font-size: 12px; }
+      #goalsContainer { grid-template-columns: 1fr !important; }
+      .profile-pill .profile-name { display: none; }
+      header.top-bar { padding: 0 12px; }
+      .top-bar-left { gap: 8px; }
+      .top-bar-right { gap: 8px; }
+      /* Mobile drawer always shows full labels, even when sidebar-collapsed is set */
+      body.mobile-drawer-open.sidebar-collapsed .nav-item span { display: inline !important; }
+      body.mobile-drawer-open.sidebar-collapsed .logo-area small { display: inline !important; }
+      body.mobile-drawer-open.sidebar-collapsed .sidebar-footer { display: block !important; }
+      body.mobile-drawer-open.sidebar-collapsed .nav-item { justify-content: flex-start; padding: 10px 12px; }
+      body.mobile-drawer-open.sidebar-collapsed .sidebar-header { padding: 20px; justify-content: space-between; }
+      body.mobile-drawer-open.sidebar-collapsed .collapse-btn { position: static; }
     }
   </style>
   <style>
@@ -1089,6 +1102,21 @@
         </div>
       </section>
 
+      <section id="view-weekly" class="view-section">
+        <div class="section-header-row">
+          <div class="section-title-wrap">
+            <div class="section-icon-chip">🗓️</div>
+            <h2>Weekly Planner</h2>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-secondary" onclick="changeWeek(-1)">← Prev</button>
+            <button class="btn-secondary" onclick="changeWeek(0)">This week</button>
+            <button class="btn-secondary" onclick="changeWeek(1)">Next →</button>
+          </div>
+        </div>
+        <div id="weeklyGrid" class="week-grid"></div>
+      </section>
+
       <!-- ================= 4. GOALS VIEW ================= -->
       <section id="view-goals" class="view-section">
         <div class="section-header-row">
@@ -1234,6 +1262,34 @@
         <div id="impulseListContainer"></div>
       </section>
 
+      <section id="view-budget" class="view-section">
+        <div class="section-header-row">
+          <div class="section-title-wrap">
+            <div class="section-icon-chip">💰</div>
+            <h2>Budget Tracker</h2>
+          </div>
+          <button class="btn-primary" onclick="openAddTxnModal()">+ Add Transaction</button>
+        </div>
+        <p class="fine-print">Figures are informational only — not financial advice.</p>
+        <div id="budgetSummary" class="stat-grid"></div>
+        <div class="card"><h3 style="font-family:var(--font-serif);margin-bottom:12px;">Spending — last 6 months</h3><div id="budgetChart" class="bar-chart"></div></div>
+        <div class="card"><h3 style="font-family:var(--font-serif);margin-bottom:12px;">Transactions</h3><div id="txnList"></div></div>
+      </section>
+
+      <section id="view-journal" class="view-section">
+        <div class="section-header-row">
+          <div class="section-title-wrap">
+            <div class="section-icon-chip">📔</div>
+            <h2>Journal</h2>
+          </div>
+          <button class="btn-primary" onclick="openAddJournalModal()">+ New Entry</button>
+        </div>
+        <div class="card" style="margin-bottom:16px;">
+          <input type="text" id="journalSearch" placeholder="Search entries..." oninput="renderJournal()" style="width:100%;">
+        </div>
+        <div id="journalList"></div>
+      </section>
+
       <!-- ================= 11. NOTES VIEW ================= -->
       <section id="view-notes" class="view-section">
         <div class="section-header-row">
@@ -1281,7 +1337,7 @@
         <div class="card" style="max-width: 540px;">
           <h3 style="font-family: var(--font-serif); font-size: 18px; margin-bottom: 10px;">Your Data Never Leaves Your Device</h3>
           <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Plenivostudio stores your data in this browser (IndexedDB when available, otherwise local storage). Export a backup JSON file regularly — browsers can clear site data, and no backup means no recovery.</p>
-          <div style="display: flex; gap: 12px;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             <button class="btn-primary" onclick="exportData()">📥 Export JSON Backup</button>
             <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📤 Restore Backup</button>
             <button class="btn-secondary" onclick="exportTasksCSV()">Export Tasks CSV</button>
@@ -1355,46 +1411,6 @@
   </div>
 
   
-      <section id="view-weekly" class="view-section">
-        <div class="section-header-row">
-          <div class="section-title-wrap">
-            <div class="section-icon-chip">🗓️</div>
-            <h2>Weekly Planner</h2>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn-secondary" onclick="changeWeek(-1)">← Prev</button>
-            <button class="btn-secondary" onclick="changeWeek(0)">This week</button>
-            <button class="btn-secondary" onclick="changeWeek(1)">Next →</button>
-          </div>
-        </div>
-        <div id="weeklyGrid" class="week-grid"></div>
-      </section>
-      <section id="view-budget" class="view-section">
-        <div class="section-header-row">
-          <div class="section-title-wrap">
-            <div class="section-icon-chip">💰</div>
-            <h2>Budget Tracker</h2>
-          </div>
-          <button class="btn-primary" onclick="openAddTxnModal()">+ Add Transaction</button>
-        </div>
-        <p class="fine-print">Figures are informational only — not financial advice.</p>
-        <div id="budgetSummary" class="stat-grid"></div>
-        <div class="card"><h3 style="font-family:var(--font-serif);margin-bottom:12px;">Spending — last 6 months</h3><div id="budgetChart" class="bar-chart"></div></div>
-        <div class="card"><h3 style="font-family:var(--font-serif);margin-bottom:12px;">Transactions</h3><div id="txnList"></div></div>
-      </section>
-      <section id="view-journal" class="view-section">
-        <div class="section-header-row">
-          <div class="section-title-wrap">
-            <div class="section-icon-chip">📔</div>
-            <h2>Journal</h2>
-          </div>
-          <button class="btn-primary" onclick="openAddJournalModal()">+ New Entry</button>
-        </div>
-        <div class="card" style="margin-bottom:16px;">
-          <input type="text" id="journalSearch" placeholder="Search entries..." oninput="renderJournal()" style="width:100%;">
-        </div>
-        <div id="journalList"></div>
-      </section>
       <div class="modal-overlay" id="genericModal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeModal()">×</button>
